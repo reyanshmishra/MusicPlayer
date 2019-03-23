@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1009528586536",
+    "firebase_url": "https://musicplayer-854aa.firebaseio.com",
+    "project_id": "musicplayer-854aa",
+    "storage_bucket": "musicplayer-854aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009528586536:android:71675361c5bbe6a4",
+        "android_client_info": {
+          "package_name": "app.deepakvishwakarma.com.musicplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009528586536-m80vu39pbecafiu5p9qab0gglbtoairr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.deepakvishwakarma.com.musicplayer",
+            "certificate_hash": "66b889564155259877d0cb342c504117d179054e"
+          }
+        },
+        {
+          "client_id": "1009528586536-g1hkk5v5vrkeebah8e2ur4ciiga1eipo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6mOytykpRebozCAFV9Kgqy5MGuq1_bRc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009528586536-g1hkk5v5vrkeebah8e2ur4ciiga1eipo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/search"
+        android:orderInCategory="100"
+        android:title="Options"
+        android:icon="@drawable/search"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/item1"
+        android:title="Item1" />
+
+    <item
+        android:id="@+id/item2"
+        android:title="Item2" />
+
+    <item
+        android:id="@+id/item3"
+        android:title="Item3" />
+
+    <item
+        android:id="@+id/item4"
+        android:title="Item4" />
+
+    <item
+        android:id="@+id/item5"
+        android:title="Item5" />
+
+    <item
+        android:id="@+id/item6"
+        android:title="Item6" />
+
+</menu>

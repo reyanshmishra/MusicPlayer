@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="4"
+    android:orientation="vertical"
+    android:background="#ffffff"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Fragments.ArtistSongs">
+
+    <LinearLayout
+        android:background="#ffffff"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="2" >
+
+        <ImageView
+            android:id="@+id/artist_song_top_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="#ffffff"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_weight="2" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_artist_song"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+</LinearLayout>
