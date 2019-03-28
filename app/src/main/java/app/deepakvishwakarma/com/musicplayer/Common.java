@@ -2,6 +2,7 @@ package app.deepakvishwakarma.com.musicplayer;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -9,8 +10,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
+import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
+
 public class Common extends Application {
     private static Context mContext;
+    private MusicService mService;
     private boolean mIsServiceRunning = false;
 
     @Override
@@ -24,16 +28,19 @@ public class Common extends Application {
         return mContext;
     }
 
-    public boolean isServiceRunning() {
-        return mIsServiceRunning;
+    public MusicService getService() {
+        return mService;
+    }
+
+    public void setService(MusicService service) {
+        mService = service;
     }
 
     public void setIsServiceRunning(boolean running) {
         mIsServiceRunning = running;
     }
 
-    public void imageloader()
-    {
+    public void imageloader() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300))
@@ -48,3 +55,6 @@ public class Common extends Application {
     }
 
 }
+
+
+

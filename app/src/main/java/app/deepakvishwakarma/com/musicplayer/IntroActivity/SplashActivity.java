@@ -3,7 +3,9 @@ package app.deepakvishwakarma.com.musicplayer.IntroActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
+import app.deepakvishwakarma.com.musicplayer.MainActivity;
 import app.deepakvishwakarma.com.musicplayer.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -13,7 +15,10 @@ public class SplashActivity extends AppCompatActivity {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        );
         Thread background = new Thread() {
             public void run() {
                 try {
@@ -21,8 +26,8 @@ public class SplashActivity extends AppCompatActivity {
                     sleep(2000);
                     // After 2 seconds redirect to another intent
 
-                    Intent intpermission = new Intent(SplashActivity.this, Permission.class);
-                    startActivity(intpermission);
+                    Intent mIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(mIntent);
                     finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();

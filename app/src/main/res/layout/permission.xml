@@ -23,9 +23,9 @@
      android:id="@+id/building_library_progress"
      style="?android:attr/progressBarStyleHorizontal"
      android:layout_width="wrap_content"
-     android:layout_height="20dp"
-     android:layout_alignLeft="@+id/building_library_task"
-     android:layout_alignRight="@+id/building_library_task"
+     android:layout_height="25dp"
+     android:layout_alignStart="@+id/building_library_task"
+     android:layout_alignEnd="@+id/building_library_task"
      android:layout_below="@+id/building_library_task"
      android:layout_marginLeft="-30dp"
      android:layout_marginRight="-30dp"/>

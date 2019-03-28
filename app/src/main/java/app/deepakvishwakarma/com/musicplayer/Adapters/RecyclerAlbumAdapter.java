@@ -3,6 +3,7 @@ package app.deepakvishwakarma.com.musicplayer.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -20,38 +21,50 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
+import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Fragments.AlbumSongs;
 import app.deepakvishwakarma.com.musicplayer.Model.Album;
 import app.deepakvishwakarma.com.musicplayer.R;
+import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdapter.ViewHolder> implements View.OnClickListener {
 
-    private ArrayList<Album> albumList;
+    private ArrayList<Album> mAlbumList;
     private Context mContext;
-    ImageLoader imageLoader = ImageLoader.getInstance();
+    Common mApp;
 
-    DisplayImageOptions options;
-
-    public RecyclerAlbumAdapter(Context mContext, ArrayList<Album> albumList) {
-        this.mContext = mContext;
-        this.albumList = albumList;
+    public RecyclerAlbumAdapter(Context context) {
+        mContext = context;
+        mApp = (Common) mContext.getApplicationContext();
+        mAlbumList = new ArrayList<>();
     }
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextView1, mTextView2;
-        ImageView Album_image;
-        ImageButton img_btn_option;
-
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mAlbumName, mArtistName;
+        ImageView mAlbum_image;
+        CardView mCard_view;
+        ImageButton mImg_btn_option;
 
         //constructor of viewholder class
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            Album_image = (ImageView) itemView.findViewById(R.id.album);
-            mTextView1 = (TextView) itemView.findViewById(R.id.textview1);
-            mTextView2 = (TextView) itemView.findViewById(R.id.textview2);
-            img_btn_option = (ImageButton) itemView.findViewById(R.id.img_btn_option);
+            mCard_view = itemView.findViewById(R.id.card_view_album);
+            mAlbum_image = itemView.findViewById(R.id.album_img);
+            mAlbumName = itemView.findViewById(R.id.album_name);
+            mArtistName = itemView.findViewById(R.id.artist_name);
+            mImg_btn_option = itemView.findViewById(R.id.img_btn_option);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mApp.getService() == null) {
+                mContext.startService(new Intent(mContext, MusicService.class));
+                mApp.getService().playsong(mAlbumList.get(getAdapterPosition()));
+            } else {
+                mApp.getService().playsong(mAlbumList.get(getAdapterPosition()));
+            }
         }
     }
 
@@ -61,37 +74,30 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_album, viewGroup, false);
         ViewHolder viewholder = new ViewHolder(view);
         return viewholder;
-
     }
 
-  /*  public void update(ArrayList<Album> data) {
-        albumList.addAll(data);
+    public void update(ArrayList<Album> data) {
+        mAlbumList.addAll(data);
         notifyDataSetChanged();
-    }  */
+    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Album model = albumList.get(i);
-       // viewHolder.mTextView.setText(String.valueOf(model.get_Id()));
+        Album model = mAlbumList.get(i);
         String id = String.valueOf(model.get_Id());
-        viewHolder.mTextView1.setText(model.get_albumName());
-        viewHolder.mTextView2.setText(model.get_artistName());
-
-        options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .resetViewBeforeLoading(true)
+        viewHolder.mAlbumName.setText(model.get_albumName());
+        viewHolder.mArtistName.setText(model.get_artistName());
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .showImageForEmptyUri(R.drawable.placeholder)
                 .showImageOnFail(R.drawable.placeholder)
-                .showImageOnLoading(R.drawable.placeholder).build();
-        imageLoader.displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_Id())), viewHolder.Album_image, options);
-        // three dot button onclicklistener
-        viewHolder.img_btn_option.setOnClickListener(this);
-
-      //  viewHolder.Album_image.setOnClickListener(this);
-        viewHolder.Album_image.setOnClickListener(new View.OnClickListener() {
+                .build();
+        ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_Id())), viewHolder.mAlbum_image,          options);
+        viewHolder.mImg_btn_option.setOnClickListener(this);
+        viewHolder.mCard_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendAlbumId = new Intent(mContext, AlbumSongs.class);
-                sendAlbumId.putExtra("AlbumID",id);
+                sendAlbumId.putExtra("AlbumID", id);
                 mContext.startActivity(sendAlbumId);
             }
         });
@@ -100,12 +106,8 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
     @Override
     public void onClick(View v) {
         int id = v.getId();
-       if(id == R.id.img_btn_option)
-        {
+        if (id == R.id.img_btn_option) {
             showPopupMenu(v);
-        }
-        else
-        {
         }
     }
 
@@ -149,6 +151,6 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
 
     @Override
     public int getItemCount() {
-        return albumList.size();
+        return mAlbumList.size();
     }
 }

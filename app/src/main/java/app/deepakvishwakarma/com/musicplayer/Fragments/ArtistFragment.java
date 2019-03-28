@@ -21,9 +21,9 @@ import app.deepakvishwakarma.com.musicplayer.Model.Artist;
 import app.deepakvishwakarma.com.musicplayer.R;
 
 public class ArtistFragment extends Fragment {
-    private RecyclerArtistAdapter adapter;
-    RecyclerView recyclerView;
-    private ArrayList<Artist> artistList;
+    private RecyclerArtistAdapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private ArrayList<Artist> mArtistList;
     Common mApp;
     public ArtistFragment()
     {
@@ -38,17 +38,16 @@ public class ArtistFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View artistview = inflater.inflate(R.layout.artist_fragment, container, false);
-        recyclerView = (RecyclerView) artistview.findViewById(R.id.recyclerview_artist);
+        mRecyclerView = artistview.findViewById(R.id.recyclerview_artist);
         mApp = (Common) Common.getInstance().getApplicationContext();
-        artistList=CentraliseMusic.buildArtistLibrary();
-        adapter = new RecyclerArtistAdapter(getContext(), artistList);
+        mArtistList=CentraliseMusic.getArtists();
+        mAdapter = new RecyclerArtistAdapter(getContext());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-      //  adapter.update(artistList);
-        adapter.notifyDataSetChanged();
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(1), true));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.update(mArtistList);
 
 
 

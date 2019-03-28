@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -21,36 +22,51 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
 
-import app.deepakvishwakarma.com.musicplayer.Fragments.AlbumSongs;
+import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Fragments.ArtistSongs;
 import app.deepakvishwakarma.com.musicplayer.Model.Artist;
 import app.deepakvishwakarma.com.musicplayer.R;
+import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAdapter.ViewHolder> implements View.OnClickListener {
-    private ArrayList<Artist> artistList;
+    private ArrayList<Artist> mArtistList;
     private Context mContext;
-    ImageLoader imageLoader = ImageLoader.getInstance();
-    DisplayImageOptions options;
-    public RecyclerArtistAdapter(Context mContext, ArrayList<Artist> artistList) {
-        this.mContext = mContext;
-        this.artistList = artistList;
+    Common mApp;
+
+    public RecyclerArtistAdapter(Context context) {
+        mContext = context;
+        mApp = (Common) mContext.getApplicationContext();
+        mArtistList = new ArrayList<>();
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView  mTextView1, mTextView2, mTextView3 ;
-        ImageView Artist_image;
-        ImageButton img_btn_option;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mArtistName, mNoArtistTrack, mNoAlbumTrack;
+        ImageView mArtist_image;
+        ImageButton mImg_btn_option;
+        CardView mCard_view;
 
         //constructor of viewholder class
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            Artist_image = (ImageView) itemView.findViewById(R.id.artist);
-            mTextView1 = (TextView) itemView.findViewById(R.id.textview1);
-            mTextView2 = (TextView) itemView.findViewById(R.id.textview2);
-            mTextView3 = (TextView) itemView.findViewById(R.id.textview3);
-            img_btn_option = (ImageButton) itemView.findViewById(R.id.img_btn_option);
+            mCard_view = itemView.findViewById(R.id.card_view_artist);
+            mArtist_image = itemView.findViewById(R.id.artist_img);
+            mArtistName = itemView.findViewById(R.id.artist_name);
+            mNoArtistTrack = itemView.findViewById(R.id.artist_count);
+            mNoAlbumTrack = itemView.findViewById(R.id.album_count);
+            mImg_btn_option = itemView.findViewById(R.id.artist_img_btn_option);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mApp.getService() == null) {
+                mContext.startService(new Intent(mContext, MusicService.class));
+                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
+            } else {
+                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
+            }
         }
     }
 
@@ -62,37 +78,38 @@ public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAd
         return viewholder;
     }
 
-  /*  public void update(ArrayList<Artist> data) {
-        artistList.addAll(data);
+    public void update(ArrayList<Artist> data) {
+        mArtistList.addAll(data);
         notifyDataSetChanged();
     }
-*/
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        Artist model = artistList.get(i);
+        Artist model = mArtistList.get(i);
         String id = String.valueOf(model.get_artistId());
 
-        viewHolder.mTextView1.setText(model.get_artistName());
-        viewHolder.mTextView2.setText(String.valueOf(model.get_noOfTracksByArtist()) +" Songs | ");
-        viewHolder.mTextView3.setText(String.valueOf(model.get_noOfAlbumsByArtist()) +" Albums");
+        viewHolder.mArtistName.setText(model.get_artistName());
+        viewHolder.mNoArtistTrack.setText(String.valueOf(model.get_noOfTracksByArtist()) + " Songs | ");
+        viewHolder.mNoAlbumTrack.setText(String.valueOf(model.get_noOfAlbumsByArtist()) + " Albums");
 
 
-         options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .resetViewBeforeLoading(true)
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
                 .showImageForEmptyUri(R.drawable.placeholder)
                 .showImageOnFail(R.drawable.placeholder)
-                .showImageOnLoading(R.drawable.placeholder).build();
-        imageLoader.displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_artistId())), viewHolder.Artist_image, options);
+                .build();
+        ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_artistId())),
+                viewHolder.mArtist_image, options);
 
-        viewHolder.img_btn_option.setOnClickListener(this);
+        viewHolder.mImg_btn_option.setOnClickListener(this);
 
 
-        viewHolder.Artist_image.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mCard_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent sendAlbumId = new Intent(mContext, ArtistSongs.class);
-                sendAlbumId.putExtra("ArtistID",id);
+                sendAlbumId.putExtra("ArtistID", id);
                 mContext.startActivity(sendAlbumId);
             }
         });
@@ -102,18 +119,15 @@ public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAd
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if(id == R.id.img_btn_option)
-        {
+        if (id == R.id.img_btn_option) {
             showPopupMenu(v);
-        }
-        else
-        {
+        } else {
         }
     }
 
     @Override
     public int getItemCount() {
-        return artistList.size();
+        return mArtistList.size();
     }
 
     private void showPopupMenu(View view) {

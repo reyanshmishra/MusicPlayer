@@ -1,67 +1,53 @@
 package app.deepakvishwakarma.com.musicplayer.Model;
 
-import android.media.MediaPlayer;
+public class Song implements Cloneable {
+    public Long _ID;
+    public String mArtist;
+    public String mTitle;
+    public String mAlbum;
+    public Long ALBUM_ID;
+    public Long ARTIST_ID;
+    public int TRACK;
+    public String DATA;
+    public Long DURATION;
 
-import java.util.concurrent.TimeUnit;
-
-public class Song {
-    Long _ID;
-    String ARTIST;
-    String TITLE;
-    String ALBUM;
-    Long ALBUM_ID;
-    Long ARTIST_ID;
-    int TRACK;
-    String DATA;
-    Long DURATION;
-
-
-    public Song(Long _ID, String TITLE, String ALBUM, Long ALBUM_ID, String ARTIST, Long ARTIST_ID, String DATA, int TRACK, Long DURATION) {
+    public Song(Long _ID, String title, String ALBUM, Long ALBUM_ID, String ARTIST, Long ARTIST_ID, String DATA, int TRACK, Long DURATION) {
         this._ID = _ID;
-        this.TITLE = TITLE;
-        this.ALBUM = ALBUM;
+        this.mTitle = title;
+        this.mAlbum = ALBUM;
         this.ALBUM_ID = ALBUM_ID;
-        this.ARTIST = ARTIST;
+        this.mArtist = ARTIST;
         this.ARTIST_ID = ARTIST_ID;
         this.DATA = DATA;
         this.TRACK = TRACK;
         this.DURATION = DURATION;
     }
 
-    public Song(Long _ID) {
-        this._ID = _ID;
-    }
 
     public Long get_ID() {
         return _ID;
     }
 
-    public void set_ID(Long _ID) {
+    public void setID(Long _ID) {
         this._ID = _ID;
     }
 
-    public String getARTIST() {
-        return ARTIST;
-    }
 
     public void setARTIST(String ARTIST) {
-        this.ARTIST = ARTIST;
+        this.mArtist = ARTIST;
     }
 
-    public String getTITLE() {
-        return TITLE;
-    }
 
     public void setTITLE(String TITLE) {
-        this.TITLE = TITLE;
+        this.mTitle = TITLE;
     }
 
     public String getALBUM() {
-        return ALBUM;
+        return mAlbum;
     }
 
     public void setALBUM(String ALBUM) {
-        this.ALBUM = ALBUM;
+        this.mAlbum = ALBUM;
     }
 
     public Long getALBUM_ID() {

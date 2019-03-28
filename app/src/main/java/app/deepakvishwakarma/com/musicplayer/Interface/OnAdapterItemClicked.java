@@ -1,4 +1,4 @@
-package app.deepakvishwakarma.com.musicplayer;
+package app.deepakvishwakarma.com.musicplayer.Interface;
 
 
 import android.view.View;

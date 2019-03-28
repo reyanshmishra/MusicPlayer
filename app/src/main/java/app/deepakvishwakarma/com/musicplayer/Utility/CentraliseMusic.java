@@ -18,7 +18,7 @@ import app.deepakvishwakarma.com.musicplayer.R;
 
 public class CentraliseMusic {
 
-    public static ArrayList buildAlbumLibrary() {
+    public static ArrayList getAlbums() {
 
         ArrayList<Album> albumList = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class CentraliseMusic {
         return albumList;
     }
 
-    public static ArrayList buildSongtLibrary() {
+    public static ArrayList getSongs() {
         ArrayList<Song> songList = new ArrayList<>();
         Cursor cursor;
         String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
@@ -94,7 +94,6 @@ public class CentraliseMusic {
                         cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                 );
                 songList.add(song);
-                //  new ArrayList<Song>().add(song);
             } while (cursor.moveToNext());
         }
         if (cursor != null) {
@@ -103,7 +102,7 @@ public class CentraliseMusic {
         return songList;
     }
 
-    public static ArrayList buildArtistLibrary() {
+    public static ArrayList getArtists() {
         ArrayList<Artist> artistList = new ArrayList<>();
         Cursor artistCursor;
         // Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -141,7 +140,7 @@ public class CentraliseMusic {
         return artistList;
     }
 
-    public static ArrayList buildAlbumSongtLibrary(int AlbumID) {
+    public static ArrayList getAlbumSong(int AlbumID) {
         ArrayList<AlbumSong> AlbumSongList = new ArrayList<>();
         String selection = "is_music != 0";
         Cursor cursor;
@@ -198,7 +197,7 @@ public class CentraliseMusic {
 
         return AlbumSongList;
     }
-    public static ArrayList buildArtistSongtLibrary(int ArtistID) {
+    public static ArrayList getArtistSong(int ArtistID) {
         ArrayList<ArtistSong> ArtistSongList = new ArrayList<>();
         String selection = "is_music != 0";
         Cursor cursor;
@@ -255,7 +254,6 @@ public class CentraliseMusic {
 
         return ArtistSongList;
     }
-
 
     public static final String makeShortTimeString(final Context context, long secs) {
         long hours, mins;

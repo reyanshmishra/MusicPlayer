@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'com.google.firebase:firebase-messaging:17.4.0'
     implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'org.jetbrains:annotations:15.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

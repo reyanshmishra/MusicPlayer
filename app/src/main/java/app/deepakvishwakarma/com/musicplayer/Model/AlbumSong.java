@@ -1,6 +1,6 @@
 package app.deepakvishwakarma.com.musicplayer.Model;
 
-public class AlbumSong {
+public class AlbumSong implements Cloneable {
     Long _ID;
     String ARTIST;
     String TITLE;

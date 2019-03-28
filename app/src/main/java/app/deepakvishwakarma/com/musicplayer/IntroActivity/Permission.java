@@ -4,10 +4,12 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
@@ -18,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -38,17 +41,18 @@ import app.deepakvishwakarma.com.musicplayer.R;
 public class Permission extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private RelativeLayout mProgressBarHolder;
-    ArrayList<Song> nameList;
-    private Cursor cursor;
+    ArrayList<Song> mSongList;
+    private Cursor mCursor;
     Common mApp;
-    int progress = 0;
+    int mProgress = 0;
     OnProgressUpdate onProgressUpdate;
+    String mBuild;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.permission);
-        nameList = new ArrayList<>();
+        mSongList = new ArrayList<>();
         mProgressBar = findViewById(R.id.building_library_progress);
         mProgressBarHolder = findViewById(R.id.progress_elements_container);
         mApp = (Common) Common.getInstance().getApplicationContext();
@@ -93,7 +97,7 @@ public class Permission extends AppCompatActivity {
     }
 
     public void checkPermissions() {
-        if (android.os.Build.VERSION.SDK_INT >= 18) {
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
             Dexter.withActivity(this)
                     .withPermissions(
                             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -182,35 +186,36 @@ public class Permission extends AppCompatActivity {
                     MediaStore.Audio.Media.DURATION
             };
 
-            cursor = Common.getInstance().getContentResolver().query(
+            mCursor = Common.getInstance().getContentResolver().query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     projection,
                     selection,
                     null,
                     null);
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (mCursor != null && mCursor.moveToFirst()) {
                 if (onProgressUpdate != null)
-                    onProgressUpdate.maxProgress(cursor.getCount());
+                    onProgressUpdate.maxProgress(mCursor.getCount());
                 do {
                     Song song = new Song(
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                            cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
+                            mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media._ID)),
+                            mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                            mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
+                            mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
+                            mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                            mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
+                            mCursor.getString(mCursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
+                            mCursor.getInt(mCursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
+                            mCursor.getLong(mCursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     );
                     if (onProgressUpdate != null)
-                        onProgressUpdate.onProgressed(progress++);
-                    nameList.add(song);
-                } while (cursor.moveToNext());
+                        onProgressUpdate.onProgressed(mProgress++);
+                    mSongList.add(song);
+                } while (mCursor.moveToNext());
+                mBuild = "Buil Success";
             }
-            if (cursor != null) {
-                cursor.close();
+            if (mCursor != null) {
+                mCursor.close();
             }
 
             return null;
@@ -219,9 +224,27 @@ public class Permission extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mProgressBarHolder.setVisibility(View.INVISIBLE);
-            Intent intpermission = new Intent(Permission.this, MainActivity.class);
-            startActivity(intpermission);
-            finish();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("build", mBuild);
+            editor.apply();
+            Thread mWait = new Thread() {
+                public void run() {
+                    try {
+                        // Thread will sleep for 0.2 seconds
+                        sleep(200);
+                        // After 2 seconds redirect to another intent
+                        Intent intpermission = new Intent(Permission.this, MainActivity.class);
+                        startActivity(intpermission);
+                        finish();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            // start thread
+            mWait.start();
+
         }
     }
 }

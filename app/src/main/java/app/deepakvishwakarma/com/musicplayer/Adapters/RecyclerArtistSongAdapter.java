@@ -12,34 +12,44 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
+
+import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArtistSongAdapter.ViewHolder> {
-    private ArrayList<ArtistSong> ArtistSongList;
+    private ArrayList<ArtistSong> mArtistSongList;
     private Context mContext;
+    Common mApp;
 
 
-    public RecyclerArtistSongAdapter(Context mContext, ArrayList<ArtistSong> ArtistSongList) {
-        this.mContext = mContext;
-        this.ArtistSongList = ArtistSongList;
+    public RecyclerArtistSongAdapter(Context context) {
+        mContext = context;
+        mArtistSongList = new ArrayList<>();
+        mApp = (Common) mContext.getApplicationContext();
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mTextView1, mTextView2, mTextView3;
-        ImageButton three_dot_album_song;
-
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mSongTitle, mSongArtist, mDuration;
+        ImageButton mThree_dot_artist_song;
 
         //constructor of viewholder class
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            three_dot_album_song = (ImageButton) itemView.findViewById(R.id.three_dot_album_song);
-            mTextView1 = (TextView) itemView.findViewById(R.id.textview1);
-            mTextView2 = (TextView) itemView.findViewById(R.id.textview2);
-            mTextView3 = (TextView) itemView.findViewById(R.id.textview3);
+            mThree_dot_artist_song = itemView.findViewById(R.id.three_dot_artist_song);
+            mSongTitle = itemView.findViewById(R.id.artist_song_title);
+            mSongArtist = itemView.findViewById(R.id.artist_song_artist);
+            mDuration = itemView.findViewById(R.id.artist_song_duration);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mApp.getService().playsong(mArtistSongList.get(getAdapterPosition()));
         }
     }
 
@@ -52,28 +62,28 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
         return viewholder;
     }
 
-  /*  public void update(ArrayList<AlbumSong> data) {
-        AlbumSongList.addAll(data);
+    public void update(ArrayList<ArtistSong> data) {
+        mArtistSongList.addAll(data);
         notifyDataSetChanged();
-    }  */
+    }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ArtistSong model = ArtistSongList.get(i);
-        viewHolder.mTextView1.setText(model.getTITLE());
-        viewHolder.mTextView2.setText(model.getARTIST());
-        viewHolder.mTextView3.setText(CentraliseMusic.makeShortTimeString(mContext,(model.getDURATION()/1000)));
-        viewHolder.three_dot_album_song.setOnClickListener(new View.OnClickListener() {
+        ArtistSong model = mArtistSongList.get(i);
+        viewHolder.mSongTitle.setText(model.getTITLE());
+        viewHolder.mSongArtist.setText(model.getARTIST());
+        viewHolder.mDuration.setText(CentraliseMusic.makeShortTimeString(mContext, (model.getDURATION() / 1000)));
+        viewHolder.mThree_dot_artist_song.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopupMenu(viewHolder.three_dot_album_song);
+                showPopupMenu(viewHolder.mThree_dot_artist_song);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return ArtistSongList.size();
+        return mArtistSongList.size();
     }
 
     private void showPopupMenu(View view) {
@@ -89,9 +99,6 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
      * Click listener for popup menu items
      */
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-
-        public MyMenuItemClickListener() {
-        }
 
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
