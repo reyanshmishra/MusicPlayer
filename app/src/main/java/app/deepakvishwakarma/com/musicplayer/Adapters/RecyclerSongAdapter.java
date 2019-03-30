@@ -2,6 +2,8 @@ package app.deepakvishwakarma.com.musicplayer.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +16,12 @@ import android.widget.TextView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.Player;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
@@ -83,13 +87,22 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
 
         @Override
         public void onClick(View v) {
-          //  mApp.getService().playsong(mSongList.get(getAdapterPosition()));
             if (mApp.getService() == null) {
-                mContext.startService(new Intent(mContext, MusicService.class));
-                mApp.getService().playsong(mSongList.get(getAdapterPosition()));
+                startservice();
+              /*  SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = preferences.edit();
+                Song str = mSongList.get(getAdapterPosition());
+                editor.putString("mobile",String.valueOf(str));
+                editor.apply();*/
+                Intent intent = new Intent(mContext,Player.class);
+                Song str = mSongList.get(getAdapterPosition());
+                intent.putExtra("Song", (Serializable) str);
+                mContext.startActivity(intent);
+                //   mApp.getService().playsong(mSongList.get(getAdapterPosition()));
             } else {
                 mApp.getService().playsong(mSongList.get(getAdapterPosition()));
             }
+
           /*  if (mMusicPlayer == null) {
                 mMusicPlayer = new MusicService(mContext);
                 mMusicPlayer.playsong(mSongList.get(getAdapterPosition()));
@@ -97,6 +110,11 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
                 mMusicPlayer.playsong(mSongList.get(getAdapterPosition()));
             } */
         }
+    }
+
+    public void startservice() {
+        Intent service = new Intent(mContext, MusicService.class);
+        mContext.startService(service);
     }
 
 }

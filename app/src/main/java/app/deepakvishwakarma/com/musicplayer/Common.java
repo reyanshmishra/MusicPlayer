@@ -8,7 +8,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 
@@ -43,9 +42,9 @@ public class Common extends Application {
     public void imageloader() {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(300))
                 .cacheInMemory(true)
-                .cacheOnDisc(true).build();
+                .cacheOnDisc(true)
+                .build();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())

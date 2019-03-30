@@ -19,8 +19,6 @@ import app.deepakvishwakarma.com.musicplayer.Model.Song;
 
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
-
-
     private Context mContext;
     private MediaPlayer mp;
     private Common mApp;
@@ -32,12 +30,15 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mApp = (Common) getApplicationContext();
         mApp.setService(this);
         mp = new MediaPlayer();
+        mp.setOnErrorListener(this);
+        mp.setOnPreparedListener(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        return START_STICKY;
+        Log.d("Start", "service start commond");
+        return START_NOT_STICKY;
     }
 
     public MusicService() {
