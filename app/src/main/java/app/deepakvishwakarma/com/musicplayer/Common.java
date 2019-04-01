@@ -15,11 +15,13 @@ public class Common extends Application {
     private static Context mContext;
     private MusicService mService;
     private boolean mIsServiceRunning = false;
+    PlayBackStarter mPlayBackStarter;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        mPlayBackStarter =new PlayBackStarter(mContext);
         imageloader();
     }
 
@@ -37,6 +39,10 @@ public class Common extends Application {
 
     public void setIsServiceRunning(boolean running) {
         mIsServiceRunning = running;
+    }
+
+    public PlayBackStarter getPlayBackStarter() {
+        return mPlayBackStarter;
     }
 
     public void imageloader() {

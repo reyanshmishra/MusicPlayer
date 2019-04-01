@@ -16,12 +16,15 @@ import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Artist;
 import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.PlayBackStarter;
 
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
     private Context mContext;
     private MediaPlayer mp;
     private Common mApp;
+    private PrepareServiceListener mPrepareServiceListener;
+
 
     @Override
     public void onCreate() {
@@ -38,11 +41,23 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Log.d("Start", "service start commond");
+        setPrepareServiceListener(mApp.getPlayBackStarter());
+        getPrepareServiceListener().onServiceRunning(this);
+
         return START_NOT_STICKY;
     }
 
-    public MusicService() {
+    public PrepareServiceListener getPrepareServiceListener() {
+        return mPrepareServiceListener;
+    }
 
+    public void setPrepareServiceListener(PrepareServiceListener prepareServiceListener) {
+        mPrepareServiceListener = prepareServiceListener;
+    }
+
+
+    //Service class not regitered in manifest without constructor
+    public MusicService() {
     }
 
     public MusicService(Context context) {
@@ -54,6 +69,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playsong(Song song) {
         try {
             mp.reset();
+            //   setmId(song.get_ID());
             mp.setDataSource(song.getDATA());
             mp.prepare();
         } catch (IOException e) {
@@ -123,5 +139,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public void onDestroy() {
 
+    }
+
+    //creating interface
+    public interface PrepareServiceListener {
+        void onServiceRunning(MusicService musicService);
     }
 }

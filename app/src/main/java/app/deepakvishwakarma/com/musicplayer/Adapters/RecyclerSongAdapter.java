@@ -89,15 +89,6 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
         public void onClick(View v) {
             if (mApp.getService() == null) {
                 startservice();
-              /*  SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-                SharedPreferences.Editor editor = preferences.edit();
-                Song str = mSongList.get(getAdapterPosition());
-                editor.putString("mobile",String.valueOf(str));
-                editor.apply();*/
-                Intent intent = new Intent(mContext,Player.class);
-                Song str = mSongList.get(getAdapterPosition());
-                intent.putExtra("Song", (Serializable) str);
-                mContext.startActivity(intent);
                 //   mApp.getService().playsong(mSongList.get(getAdapterPosition()));
             } else {
                 mApp.getService().playsong(mSongList.get(getAdapterPosition()));
@@ -116,5 +107,4 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
         Intent service = new Intent(mContext, MusicService.class);
         mContext.startService(service);
     }
-
 }
