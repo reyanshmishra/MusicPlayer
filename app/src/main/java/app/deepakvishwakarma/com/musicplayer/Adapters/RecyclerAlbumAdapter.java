@@ -84,7 +84,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Album model = mAlbumList.get(i);
-        String id = String.valueOf(model.get_Id());
+     //   String id = String.valueOf(model.get_Id());
         viewHolder.mAlbumName.setText(model.get_albumName());
         viewHolder.mArtistName.setText(model.get_artistName());
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -93,14 +93,6 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
                 .build();
         ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_Id())), viewHolder.mAlbum_image,          options);
         viewHolder.mImg_btn_option.setOnClickListener(this);
-        viewHolder.mCard_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sendAlbumId = new Intent(mContext, AlbumSongs.class);
-                sendAlbumId.putExtra("AlbumID", id);
-                mContext.startActivity(sendAlbumId);
-            }
-        });
     }
 
     @Override

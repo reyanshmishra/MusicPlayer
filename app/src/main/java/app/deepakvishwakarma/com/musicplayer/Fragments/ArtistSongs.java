@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.ArrayList;
@@ -37,7 +38,11 @@ public class ArtistSongs extends AppCompatActivity {
         if (receveAlbumID != null) {
             String ID = receveAlbumID.getStringExtra("ArtistID");
             ArtistID = Integer.parseInt(ID);
-            ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(ArtistID)), mImageArtist);
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                    .showImageForEmptyUri(R.drawable.placeholder)
+                    .showImageOnFail(R.drawable.placeholder)
+                    .build();
+            ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(ArtistID)), mImageArtist , options);
         }
         mArtistSongList = CentraliseMusic.getArtistSong(ArtistID);
         mAdapter = new RecyclerArtistSongAdapter(this);

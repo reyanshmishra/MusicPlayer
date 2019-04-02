@@ -53,12 +53,12 @@
             android:name=".Fragments.AlbumSongs"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeSubActivity" />
         <activity
             android:name=".Fragments.ArtistSongs"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppThemeSubActivity" />
 
         <service android:name=".Services.FirebaseService">
             <intent-filter>
