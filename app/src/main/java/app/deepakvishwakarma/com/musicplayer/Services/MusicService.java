@@ -11,6 +11,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
+import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
 import app.deepakvishwakarma.com.musicplayer.Model.Album;
 import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Artist;
@@ -69,7 +70,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playsong(Song song) {
         try {
             mp.reset();
-            //   setmId(song.get_ID());
             mp.setDataSource(song.getDATA());
             mp.prepare();
         } catch (IOException e) {
@@ -142,7 +142,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     //creating interface
-    public interface PrepareServiceListener {
+   /* public interface PrepareServiceListener {
         void onServiceRunning(MusicService musicService);
-    }
+    } */
 }

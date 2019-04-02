@@ -266,6 +266,7 @@ public class CentraliseMusic {
         final String durationFormat = context.getResources().getString(
                 hours == 0 ? R.string.durationformatshort : R.string.durationformatlong);
         return String.format(durationFormat, hours, mins, secs);
+
     }
     public static Uri getAlbumArtUri(long paramInt) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), paramInt);

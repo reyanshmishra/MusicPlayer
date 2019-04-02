@@ -2,9 +2,10 @@ package app.deepakvishwakarma.com.musicplayer;
 
 import android.content.Context;
 
+import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 
-public class PlayBackStarter implements MusicService.PrepareServiceListener {
+public class PlayBackStarter implements PrepareServiceListener {
     Context mContext;
     Common mApp;
 
