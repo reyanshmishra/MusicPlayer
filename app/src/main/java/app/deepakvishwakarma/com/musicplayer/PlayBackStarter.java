@@ -14,8 +14,8 @@ public class PlayBackStarter implements PrepareServiceListener {
     public void onServiceRunning(MusicService musicService) {
         mApp = (Common) mContext.getApplicationContext();
         mApp.getService().setPrepareServiceListener(this);
-
     }
+
     public PlayBackStarter(Context context) {
         mContext = context;
         mApp = (Common) mContext.getApplicationContext();

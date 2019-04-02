@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 
 import java.util.ArrayList;
+
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Album;
 import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
@@ -145,7 +146,7 @@ public class CentraliseMusic {
         String selection = "is_music != 0";
         Cursor cursor;
 
-        if(AlbumID > 0) {
+        if (AlbumID > 0) {
             selection = selection + " and album_id = " + AlbumID;
         }
         String[] projection = {
@@ -184,12 +185,9 @@ public class CentraliseMusic {
                     AlbumSongList.add(Albumsong);
                 } while (cursor.moveToNext());
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("Media", e.toString());
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -197,12 +195,13 @@ public class CentraliseMusic {
 
         return AlbumSongList;
     }
+
     public static ArrayList getArtistSong(int ArtistID) {
         ArrayList<ArtistSong> ArtistSongList = new ArrayList<>();
         String selection = "is_music != 0";
         Cursor cursor;
 
-        if(ArtistID > 0) {
+        if (ArtistID > 0) {
             selection = selection + " and artist_id = " + ArtistID;
         }
         String[] projection = {
@@ -241,12 +240,9 @@ public class CentraliseMusic {
                     ArtistSongList.add(Artistsong);
                 } while (cursor.moveToNext());
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("Media", e.toString());
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -268,6 +264,7 @@ public class CentraliseMusic {
         return String.format(durationFormat, hours, mins, secs);
 
     }
+
     public static Uri getAlbumArtUri(long paramInt) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), paramInt);
     }
