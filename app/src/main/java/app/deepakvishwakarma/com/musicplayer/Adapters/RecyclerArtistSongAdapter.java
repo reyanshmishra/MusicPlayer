@@ -49,7 +49,9 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
 
         @Override
         public void onClick(View v) {
-            mApp.getService().playsong(mArtistSongList.get(getAdapterPosition()));
+            //To fetch the songs of album or artist use  the same Song Model instead of creating new on,
+            //as song data is going to be same.
+//            mApp.getService().playsong(mArtistSongList.get(getAdapterPosition()));
         }
     }
 

@@ -92,7 +92,7 @@ public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbum
             if (mApp.getService() == null) {
                 mContext.startService(new Intent(mContext, MusicService.class));
             } else {
-                mApp.getService().playsong(mAlbumSongList.get(getAdapterPosition()));
+//                mApp.getService().playsong(mAlbumSongList.get(getAdapterPosition()));
             }
         }
     }

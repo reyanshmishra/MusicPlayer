@@ -20,7 +20,7 @@ import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.PlayBackStarter;
 
 
-public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+public class MusicService extends Service implements MediaPlayer.OnErrorListener {
     private Context mContext;
     private MediaPlayer mp;
     private Common mApp;
@@ -35,18 +35,44 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mApp.setService(this);
         mp = new MediaPlayer();
         mp.setOnErrorListener(this);
-        mp.setOnPreparedListener(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Log.d("Start", "service start commond");
+
         setPrepareServiceListener(mApp.getPlayBackStarter());
+        //Either do this
         getPrepareServiceListener().onServiceRunning(this);
+        //or do this
+        //mPrepareServiceListener.onServiceRunning(this);
 
         return START_NOT_STICKY;
     }
+
+
+    public void playSong(Song song) {
+        try {
+            mp.reset();
+            mp.setDataSource(song.getDATA());
+            mp.prepare();
+            /*After preparing we can directly start the player as we are not streaming and not using prepareAsync,
+            so we won't need onPrepareListener we can remove that as well.
+            */
+            mp.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.d("TAG", what + "+" + extra);
+        return false;
+    }
+
 
     public PrepareServiceListener getPrepareServiceListener() {
         return mPrepareServiceListener;
@@ -54,80 +80,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public void setPrepareServiceListener(PrepareServiceListener prepareServiceListener) {
         mPrepareServiceListener = prepareServiceListener;
-    }
-
-
-    //Service class not regitered in manifest without constructor
-    public MusicService() {
-    }
-
-    public MusicService(Context context) {
-        mContext = context;
-        mp.setOnErrorListener(this);
-        mp.setOnPreparedListener(this);
-    }
-
-    public void playsong(Song song) {
-        try {
-            mp.reset();
-            mp.setDataSource(song.getDATA());
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playsong(Album song) {
-        try {
-            mp.reset();
-            mp.setDataSource(String.valueOf(song.get_Id()));
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playsong(Artist song) {
-        try {
-            mp.reset();
-            mp.setDataSource(String.valueOf(song.get_artistId()));
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playsong(AlbumSong song) {
-        try {
-            mp.reset();
-            mp.setDataSource(song.getDATA());
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playsong(ArtistSong song) {
-        try {
-            mp.reset();
-            mp.setDataSource(song.getDATA());
-            mp.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public void onPrepared(MediaPlayer player) {
-        Toast.makeText(mContext, "MediaPlayer prepared", Toast.LENGTH_SHORT).show();
-        mp.start();
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.d("TAG", what + "+" + extra);
-        return false;
     }
 
 
@@ -140,9 +92,4 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void onDestroy() {
 
     }
-
-    //creating interface
-   /* public interface PrepareServiceListener {
-        void onServiceRunning(MusicService musicService);
-    } */
 }
