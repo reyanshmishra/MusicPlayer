@@ -26,7 +26,6 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
     private ArrayList<Song> mSongList;
     private Context mContext;
     private Common mApp;
-    MusicService mMusicPlayer;
 
     public RecyclerSongAdapter(Context context) {
         mContext = context;
@@ -83,24 +82,10 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
 
         @Override
         public void onClick(View v) {
-            if (mApp.getService() == null) {
-                startservice();
-                //   mApp.getService().playsong(mSongList.get(getAdapterPosition()));
-            } else {
-                mApp.getService().playsong(mSongList.get(getAdapterPosition()));
-            }
-
-          /*  if (mMusicPlayer == null) {
-                mMusicPlayer = new MusicService(mContext);
-                mMusicPlayer.playsong(mSongList.get(getAdapterPosition()));
-            } else {
-                mMusicPlayer.playsong(mSongList.get(getAdapterPosition()));
-            } */
+            /*PlayBackStarter will always be available as it gets started by the Application class as soon as app opens.*/
+            mApp.getPlayBackStarter().playSong(mSongList.get(getAdapterPosition()));
         }
     }
 
-    public void startservice() {
-        Intent service = new Intent(mContext, MusicService.class);
-        mContext.startService(service);
-    }
+
 }
