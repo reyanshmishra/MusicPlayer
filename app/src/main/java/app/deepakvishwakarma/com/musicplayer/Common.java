@@ -14,7 +14,6 @@ import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 public class Common extends Application {
     private static Context mContext;
     private MusicService mService;
-    private boolean mIsServiceRunning = false;
     PlayBackStarter mPlayBackStarter;
 
     @Override
@@ -35,10 +34,6 @@ public class Common extends Application {
 
     public void setService(MusicService service) {
         mService = service;
-    }
-
-    public void setIsServiceRunning(boolean running) {
-        mIsServiceRunning = running;
     }
 
     public PlayBackStarter getPlayBackStarter() {

@@ -63,9 +63,9 @@ public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAd
         public void onClick(View v) {
             if (mApp.getService() == null) {
                 mContext.startService(new Intent(mContext, MusicService.class));
-                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
+//                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
             } else {
-                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
+//                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
             }
         }
     }
