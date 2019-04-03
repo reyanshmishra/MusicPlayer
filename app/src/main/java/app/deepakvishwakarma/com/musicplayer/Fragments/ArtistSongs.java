@@ -34,17 +34,16 @@ public class ArtistSongs extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerview_artist_song);
         mImageArtist = findViewById(R.id.artist_song_top_image);
         mApp = (Common) Common.getInstance().getApplicationContext();
-        Intent receveAlbumID = getIntent();
-        if (receveAlbumID != null) {
-            String ID = receveAlbumID.getStringExtra("ArtistID");
-            ArtistID = Integer.parseInt(ID);
+        Bundle bundle = getIntent().getExtras();
+        ArtistID = (int) (long) bundle.get("ArtistID");
+        if (getIntent().getExtras() != null) {
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                     .showImageForEmptyUri(R.drawable.placeholder)
                     .showImageOnFail(R.drawable.placeholder)
                     .build();
-            ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(ArtistID)), mImageArtist , options);
+            ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(ArtistID)), mImageArtist, options);
         }
-        mArtistSongList = CentraliseMusic.getArtistSong(ArtistID);
+        mArtistSongList = CentraliseMusic.getSongs("Artist",ArtistID);
         mAdapter = new RecyclerArtistSongAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);

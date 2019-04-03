@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Adapters.RecyclerAlbumSongAdapter;
 import app.deepakvishwakarma.com.musicplayer.Common;
-import app.deepakvishwakarma.com.musicplayer.Model.Album;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
@@ -22,7 +21,7 @@ import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 public class AlbumSongs extends AppCompatActivity {
     private RecyclerAlbumSongAdapter mAdapter;
     private RecyclerView mRecyclerView;
-    private ArrayList<Song> mAlbumSongList;
+    private ArrayList<Song> songList;
     private ImageView mImageAlbum;
     private Common mApp;
     int mAlbumID;
@@ -31,12 +30,12 @@ public class AlbumSongs extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_song);
-        mImageAlbum = (ImageView) findViewById(R.id.album_song_top_image);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_album_song);
+        mImageAlbum = findViewById(R.id.album_song_top_image);
+        mRecyclerView = findViewById(R.id.recyclerview_album_song);
         mApp = (Common) Common.getInstance().getApplicationContext();
         Bundle bundle = getIntent().getExtras();
         //Extract the data from Bundle
-        mAlbumID = (int)(long) bundle.get("AlbumID");
+        mAlbumID = (int) (long) bundle.get("AlbumID");
         if (getIntent().getExtras() != null) {
             DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                     .showImageForEmptyUri(R.drawable.placeholder)
@@ -44,11 +43,11 @@ public class AlbumSongs extends AppCompatActivity {
                     .build();
             ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(mAlbumID)), mImageAlbum, options);
         }
-        mAlbumSongList = CentraliseMusic.getAlbumSong(mAlbumID);
+        songList = CentraliseMusic.getSongs("Album",mAlbumID);
         mAdapter = new RecyclerAlbumSongAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter.update(mAlbumSongList);
+        mAdapter.update(songList);
     }
 }

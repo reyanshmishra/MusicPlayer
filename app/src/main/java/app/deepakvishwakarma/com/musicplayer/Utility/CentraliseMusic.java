@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -56,10 +55,25 @@ public class CentraliseMusic {
         return albumList;
     }
 
-    public static ArrayList getSongs() {
+    public static ArrayList getSongs(String from, int Id) {
+        String selection = null;
+        String sortOrder = null;
+        if (from.equals("Album")) {
+            if (Id > 0) {
+                selection = "is_music != 0 and album_id = " + Id;
+                sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
+            }
+        } else if (from.equals("Artist")) {
+            if (Id > 0) {
+                selection = "is_music != 0 and artist_id = " + Id;
+                sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
+            }
+        } else {
+            selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        }
         ArrayList<Song> songList = new ArrayList<>();
         Cursor cursor;
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+        // String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
         String[] projection = {
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.ARTIST,
@@ -77,7 +91,7 @@ public class CentraliseMusic {
                 projection,
                 selection,
                 null,
-                null);
+                sortOrder);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -104,8 +118,6 @@ public class CentraliseMusic {
     public static ArrayList getArtists() {
         ArrayList<Artist> artistList = new ArrayList<>();
         Cursor artistCursor;
-        // Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        // String sortBy = MediaStore.Audio.Artists.ARTIST + " ASC";
 
         String[] mProjection =
                 {
@@ -137,116 +149,6 @@ public class CentraliseMusic {
             }
         }
         return artistList;
-    }
-
-    public static ArrayList getAlbumSong(int AlbumID) {
-        ArrayList<Song> mAlbumSongList = new ArrayList<>();
-        String selection = "is_music != 0";
-        Cursor cursor;
-
-        if (AlbumID > 0) {
-            selection = selection + " and album_id = " + AlbumID;
-        }
-        String[] projection = {
-                MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.ARTIST_ID,
-                MediaStore.Audio.Media.TRACK,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DURATION
-        };
-        final String sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
-        //uri,projection,selection,selection args and sord order
-        cursor = Common.getInstance().getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                selection,
-                null,
-                sortOrder);
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Song Albumsong = new Song(
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                            cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-                    );
-                    mAlbumSongList.add(Albumsong);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            Log.e("Media", e.toString());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return mAlbumSongList;
-    }
-
-    public static ArrayList getArtistSong(int ArtistID) {
-        ArrayList<Song> mArtistSongList = new ArrayList<>();
-        String selection = "is_music != 0";
-        Cursor cursor;
-
-        if (ArtistID > 0) {
-            selection = selection + " and artist_id = " + ArtistID;
-        }
-        String[] projection = {
-                MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.ALBUM_ID,
-                MediaStore.Audio.Media.ARTIST_ID,
-                MediaStore.Audio.Media.TRACK,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DURATION
-        };
-        final String sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
-        //uri,projection,selection,selection args and sord order
-        cursor = Common.getInstance().getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                selection,
-                null,
-                sortOrder);
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Song Artistsong = new Song(
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID)),
-                            cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                            cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
-                            cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
-                    );
-                    mArtistSongList.add(Artistsong);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            Log.e("Media", e.toString());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return mArtistSongList;
     }
 
     public static final String makeShortTimeString(final Context context, long secs) {

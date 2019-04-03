@@ -34,7 +34,7 @@ public class SongsFragment extends Fragment {
         mRecyclerView = mSongview.findViewById(R.id.recyclerview_song);
         mContext = getContext();
         mApp = (Common) mContext.getApplicationContext();
-        mSongList = CentraliseMusic.getSongs();
+        mSongList = CentraliseMusic.getSongs("Song",0);
         mAdapter = new RecyclerSongAdapter(getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);

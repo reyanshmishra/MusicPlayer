@@ -3,6 +3,7 @@ package app.deepakvishwakarma.com.musicplayer.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -61,12 +62,11 @@ public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAd
 
         @Override
         public void onClick(View v) {
-            if (mApp.getService() == null) {
-                mContext.startService(new Intent(mContext, MusicService.class));
-//                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
-            } else {
-//                mApp.getService().playsong(mArtistList.get(getAdapterPosition()));
-            }
+            Bundle mBundle =new Bundle();
+            mBundle.putLong("ArtistID",mArtistList.get(getAdapterPosition())._artistId);
+            Intent intent=new Intent(mContext,ArtistSongs.class);
+            intent.putExtras(mBundle);
+            mContext.startActivity(intent);
         }
     }
 
@@ -103,16 +103,6 @@ public class RecyclerArtistAdapter extends RecyclerView.Adapter<RecyclerArtistAd
                 viewHolder.mArtist_image, options);
 
         viewHolder.mImg_btn_option.setOnClickListener(this);
-
-
-        viewHolder.mCard_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent sendAlbumId = new Intent(mContext, ArtistSongs.class);
-                sendAlbumId.putExtra("ArtistID", id);
-                mContext.startActivity(sendAlbumId);
-            }
-        });
     }
 
 
