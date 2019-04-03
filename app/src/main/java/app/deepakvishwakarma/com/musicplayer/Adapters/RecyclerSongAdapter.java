@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.PlayingActivity;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
@@ -85,6 +86,8 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
             /*PlayBackStarter will always be available as it gets started by the Application class as soon as app opens.*/
            // mApp.getPlayBackStarter().playSong(mSongList.get(getAdapterPosition()));
             mApp.getPlayBackStarter().playSong( mSongList ,getAdapterPosition());
+            Intent playing=new Intent(mContext,PlayingActivity.class);
+            mContext.startActivity(playing);
         }
     }
 

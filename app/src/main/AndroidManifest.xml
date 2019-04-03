@@ -59,6 +59,10 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeSubActivity" />
+        <activity android:name=".PlayingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeSubActivity"/>
 
         <service android:name=".Services.FirebaseService">
             <intent-filter>
