@@ -83,7 +83,8 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
         @Override
         public void onClick(View v) {
             /*PlayBackStarter will always be available as it gets started by the Application class as soon as app opens.*/
-            mApp.getPlayBackStarter().playSong(mSongList.get(getAdapterPosition()));
+           // mApp.getPlayBackStarter().playSong(mSongList.get(getAdapterPosition()));
+            mApp.getPlayBackStarter().playSong( mSongList ,getAdapterPosition());
         }
     }
 

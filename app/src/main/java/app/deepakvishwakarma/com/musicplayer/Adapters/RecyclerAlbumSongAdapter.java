@@ -90,11 +90,7 @@ public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbum
 
         @Override
         public void onClick(View v) {
-            if (mApp.getService() == null) {
-                mContext.startService(new Intent(mContext, MusicService.class));
-            } else {
-//                mApp.getService().playsong(mAlbumSongList.get(getAdapterPosition()));
-            }
+            mApp.getPlayBackStarter().playSong(mAlbumSongList,getAdapterPosition());
         }
     }
 

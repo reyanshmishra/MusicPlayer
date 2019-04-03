@@ -25,18 +25,15 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
     private Context mContext;
     Common mApp;
 
-
     public RecyclerArtistSongAdapter(Context context) {
         mContext = context;
         mArtistSongList = new ArrayList<>();
         mApp = (Common) mContext.getApplicationContext();
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mSongTitle, mSongArtist, mDuration;
         ImageButton mThree_dot_artist_song;
-
         //constructor of viewholder class
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -49,9 +46,7 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
 
         @Override
         public void onClick(View v) {
-            //To fetch the songs of album or artist use  the same Song Model instead of creating new on,
-            //as song data is going to be same.
-//            mApp.getService().playsong(mArtistSongList.get(getAdapterPosition()));
+            mApp.getPlayBackStarter().playSong(mArtistSongList,getAdapterPosition());
         }
     }
 

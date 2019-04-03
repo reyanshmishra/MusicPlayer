@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
@@ -41,15 +42,14 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         getPrepareServiceListener().onServiceRunning(this);
         //or do this
         //mPrepareServiceListener.onServiceRunning(this);
-
         return START_NOT_STICKY;
     }
 
 
-    public void playSong(Song song) {
+    public void playSong(ArrayList<Song> songs,int position) {
         try {
             mp.reset();
-            mp.setDataSource(song.getDATA());
+            mp.setDataSource(songs.get(position).getDATA());
             mp.prepare();
             /*After preparing we can directly start the player as we are not streaming and not using prepareAsync,
             so we won't need onPrepareListener we can remove that as well.

@@ -69,12 +69,8 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
             Intent intent=new Intent(mContext,AlbumSongs.class);
             intent.putExtras(bundle);
             mContext.startActivity(intent);
-
         }
     }
-
-
-
 
     @NonNull
     @Override
