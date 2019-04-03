@@ -11,9 +11,7 @@ import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Album;
-import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Artist;
-import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.R;
 
@@ -142,7 +140,7 @@ public class CentraliseMusic {
     }
 
     public static ArrayList getAlbumSong(int AlbumID) {
-        ArrayList<AlbumSong> AlbumSongList = new ArrayList<>();
+        ArrayList<Song> mAlbumSongList = new ArrayList<>();
         String selection = "is_music != 0";
         Cursor cursor;
 
@@ -171,7 +169,7 @@ public class CentraliseMusic {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    AlbumSong Albumsong = new AlbumSong(
+                    Song Albumsong = new Song(
                             cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
@@ -182,7 +180,7 @@ public class CentraliseMusic {
                             cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
                             cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     );
-                    AlbumSongList.add(Albumsong);
+                    mAlbumSongList.add(Albumsong);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -193,11 +191,11 @@ public class CentraliseMusic {
             }
         }
 
-        return AlbumSongList;
+        return mAlbumSongList;
     }
 
     public static ArrayList getArtistSong(int ArtistID) {
-        ArrayList<ArtistSong> ArtistSongList = new ArrayList<>();
+        ArrayList<Song> mArtistSongList = new ArrayList<>();
         String selection = "is_music != 0";
         Cursor cursor;
 
@@ -226,7 +224,7 @@ public class CentraliseMusic {
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    ArtistSong Artistsong = new ArtistSong(
+                    Song Artistsong = new Song(
                             cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
                             cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)),
@@ -237,7 +235,7 @@ public class CentraliseMusic {
                             cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media.TRACK)),
                             cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     );
-                    ArtistSongList.add(Artistsong);
+                    mArtistSongList.add(Artistsong);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -248,7 +246,7 @@ public class CentraliseMusic {
             }
         }
 
-        return ArtistSongList;
+        return mArtistSongList;
     }
 
     public static final String makeShortTimeString(final Context context, long secs) {

@@ -16,12 +16,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
-import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
+import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArtistSongAdapter.ViewHolder> {
-    private ArrayList<ArtistSong> mArtistSongList;
+    private ArrayList<Song> mArtistSongList;
     private Context mContext;
     Common mApp;
 
@@ -64,16 +64,16 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
         return viewholder;
     }
 
-    public void update(ArrayList<ArtistSong> data) {
+    public void update(ArrayList<Song> data) {
         mArtistSongList.addAll(data);
         notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ArtistSong model = mArtistSongList.get(i);
-        viewHolder.mSongTitle.setText(model.getTITLE());
-        viewHolder.mSongArtist.setText(model.getARTIST());
+        Song model = mArtistSongList.get(i);
+        viewHolder.mSongTitle.setText(model.mTitle);
+        viewHolder.mSongArtist.setText(model.mArtist);
         viewHolder.mDuration.setText(CentraliseMusic.makeShortTimeString(mContext, (model.getDURATION() / 1000)));
         viewHolder.mThree_dot_artist_song.setOnClickListener(new View.OnClickListener() {
             @Override

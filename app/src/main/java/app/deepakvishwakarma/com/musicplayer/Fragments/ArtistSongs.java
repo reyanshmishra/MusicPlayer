@@ -15,14 +15,14 @@ import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Adapters.RecyclerArtistSongAdapter;
 import app.deepakvishwakarma.com.musicplayer.Common;
-import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
+import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class ArtistSongs extends AppCompatActivity {
     private RecyclerArtistSongAdapter mAdapter;
     RecyclerView mRecyclerView;
-    ArrayList<ArtistSong> mArtistSongList;
+    ArrayList<Song> mArtistSongList;
     Common mApp;
     int ArtistID;
     ImageView mImageArtist;

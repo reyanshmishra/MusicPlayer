@@ -18,13 +18,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
-import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
+import app.deepakvishwakarma.com.musicplayer.Model.Album;
+import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
 public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbumSongAdapter.ViewHolder> {
-    private ArrayList<AlbumSong> mAlbumSongList;
+    private ArrayList<Song> mAlbumSongList;
     private Context mContext;
     Common mApp;
     private MusicService mMusicPlayer;
@@ -47,9 +48,9 @@ public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbum
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        AlbumSong model = mAlbumSongList.get(i);
-        viewHolder.mSongTitle.setText(model.getTITLE());
-        viewHolder.mSongArtist.setText(model.getARTIST());
+        Song model = mAlbumSongList.get(i);
+        viewHolder.mSongTitle.setText(model.mTitle);
+        viewHolder.mSongArtist.setText(model.mArtist);
         viewHolder.mDuration.setText(CentraliseMusic.makeShortTimeString(mContext, (model.getDURATION() / 1000)));
 
         viewHolder.mThree_dot_album_song.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +66,7 @@ public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbum
         return mAlbumSongList.size();
     }
 
-    public void update(ArrayList<AlbumSong> data) {
+    public void update(ArrayList<Song> data) {
         mAlbumSongList.addAll(data);
         notifyDataSetChanged();
     }

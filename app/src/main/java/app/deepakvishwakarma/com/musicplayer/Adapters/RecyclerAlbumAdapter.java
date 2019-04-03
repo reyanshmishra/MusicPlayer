@@ -2,6 +2,7 @@ package app.deepakvishwakarma.com.musicplayer.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
         //constructor of viewholder class
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             mCard_view = itemView.findViewById(R.id.card_view_album);
             mAlbum_image = itemView.findViewById(R.id.album_img);
             mAlbumName = itemView.findViewById(R.id.album_name);
@@ -59,14 +61,20 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
 
         @Override
         public void onClick(View v) {
-            if (mApp.getService() == null) {
-                mContext.startService(new Intent(mContext, MusicService.class));
-//                mApp.getService().playsong(mAlbumList.get(getAdapterPosition()));
-            } else {
-//                mApp.getService().playsong(mAlbumList.get(getAdapterPosition()));
-            }
+            Bundle bundle = new Bundle();
+           // bundle.putString("AlbumName", mAlbumList.get(getAdapterPosition())._albumName);
+          //  bundle.putString("ArtistName", mAlbumList.get(getAdapterPosition())._artistName);
+          //  bundle.putString("Albums", "ALBUMS");
+            bundle.putLong("AlbumID", mAlbumList.get(getAdapterPosition())._Id);
+            Intent intent=new Intent(mContext,AlbumSongs.class);
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
+
         }
     }
+
+
+
 
     @NonNull
     @Override
@@ -84,7 +92,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Album model = mAlbumList.get(i);
-     //   String id = String.valueOf(model.get_Id());
+        String id = String.valueOf(model.get_Id());
         viewHolder.mAlbumName.setText(model.get_albumName());
         viewHolder.mArtistName.setText(model.get_artistName());
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
@@ -93,6 +101,7 @@ public class RecyclerAlbumAdapter extends RecyclerView.Adapter<RecyclerAlbumAdap
                 .build();
         ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(model.get_Id())), viewHolder.mAlbum_image,          options);
         viewHolder.mImg_btn_option.setOnClickListener(this);
+
     }
 
     @Override

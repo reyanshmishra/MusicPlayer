@@ -6,18 +6,12 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
-import app.deepakvishwakarma.com.musicplayer.Model.Album;
-import app.deepakvishwakarma.com.musicplayer.Model.AlbumSong;
-import app.deepakvishwakarma.com.musicplayer.Model.Artist;
-import app.deepakvishwakarma.com.musicplayer.Model.ArtistSong;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
-import app.deepakvishwakarma.com.musicplayer.PlayBackStarter;
 
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
