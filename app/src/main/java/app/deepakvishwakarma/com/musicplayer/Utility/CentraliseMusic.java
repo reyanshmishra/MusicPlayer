@@ -58,12 +58,12 @@ public class CentraliseMusic {
     public static ArrayList getSongs(String from, int Id) {
         String selection = null;
         String sortOrder = null;
-        if (from.equals("Album")) {
+        if (from.equalsIgnoreCase("Album")) {
             if (Id > 0) {
                 selection = "is_music != 0 and album_id = " + Id;
                 sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
             }
-        } else if (from.equals("Artist")) {
+        } else if (from.equalsIgnoreCase("Artist")) {
             if (Id > 0) {
                 selection = "is_music != 0 and artist_id = " + Id;
                 sortOrder = MediaStore.Audio.AudioColumns.TITLE + " COLLATE LOCALIZED ASC";
