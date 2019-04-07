@@ -3,6 +3,7 @@ package app.deepakvishwakarma.com.musicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class PlayBackStarter implements PrepareServiceListener {
         //Either do this
 //        musicService.playsong(mSong);
         //or do this both will work.
-        mApp.getPlayBackStarter().playSong(mSongs,mPos);
+        mApp.getPlayBackStarter().playSong(mSongs, mPos);
 
     }
 
@@ -50,9 +51,26 @@ public class PlayBackStarter implements PrepareServiceListener {
         } else {
             Log.d("DEEPAK", "Now the service has started only this block will execute everytime you click on a song.");
             //This will be called if the service has started and is available because once service has started we need not to start it again.
-            mApp.getService().playSong(mSongs,mPos);
+            mApp.getService().playSong(mSongs, mPos);
         }
     }
 
+    public void Stopsong() {
+        if (mApp.getService().getmIsServicePlaying() == true) {
+            mApp.getService().stopSong();
+            Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            mApp.getService().stopSong();
+        }
+    }
 
+    public void Nextsong() {
+
+    }
+
+    public void Previoussong() {
+
+    }
 }

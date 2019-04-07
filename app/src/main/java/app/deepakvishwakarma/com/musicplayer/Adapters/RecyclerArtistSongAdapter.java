@@ -1,6 +1,7 @@
 package app.deepakvishwakarma.com.musicplayer.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.PlayingActivity;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
@@ -47,6 +49,8 @@ public class RecyclerArtistSongAdapter extends RecyclerView.Adapter<RecyclerArti
         @Override
         public void onClick(View v) {
             mApp.getPlayBackStarter().playSong(mArtistSongList,getAdapterPosition());
+            Intent playing=new Intent(mContext,PlayingActivity.class);
+            mContext.startActivity(playing);
         }
     }
 

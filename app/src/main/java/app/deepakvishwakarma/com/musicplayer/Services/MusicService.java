@@ -20,7 +20,17 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     private MediaPlayer mp;
     private Common mApp;
     private PrepareServiceListener mPrepareServiceListener;
-    Song mSong;
+    ArrayList<Song> mSongs;
+    int mSongPos;
+    Boolean mIsServicePlaying;
+
+    public ArrayList<Song> getmSongs() {
+        return mSongs;
+    }
+
+    public int getmSongPos() {
+        return mSongPos;
+    }
 
     @Override
     public void onCreate() {
@@ -48,7 +58,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public void playSong(ArrayList<Song> songs, int position) {
         try {
-            mSong = songs.get(position);
+            mSongs = songs;
+            mSongPos = position;
             mp.reset();
             mp.setDataSource(songs.get(position).getDATA());
             mp.prepare();
@@ -56,13 +67,28 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             so we won't need onPrepareListener we can remove that as well.
             */
             mp.start();
+            setmIsServicePlaying(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    public void stopSong()
+    {
+        if(!mp.isPlaying())
+        {
+            mp.start();
+        }
+        else {
+            mp.pause();
+        }
+    }
 
-    public Song getSong() {
-        return mSong;
+    public Boolean getmIsServicePlaying() {
+        return mIsServicePlaying;
+    }
+
+    public void setmIsServicePlaying(Boolean mIsServicePlaying) {
+        this.mIsServicePlaying = mIsServicePlaying;
     }
 
     @Override

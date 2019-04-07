@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Model.Album;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.PlayingActivity;
 import app.deepakvishwakarma.com.musicplayer.R;
 import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
@@ -91,6 +92,8 @@ public class RecyclerAlbumSongAdapter extends RecyclerView.Adapter<RecyclerAlbum
         @Override
         public void onClick(View v) {
             mApp.getPlayBackStarter().playSong(mAlbumSongList,getAdapterPosition());
+            Intent playing=new Intent(mContext,PlayingActivity.class);
+            mContext.startActivity(playing);
         }
     }
 

@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,16 +38,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String build = pref.getString("build", "");
-
-        if (build.equals("") ) {
+        if (build.equals("")) {
             Intent intent = new Intent(this, Permission.class);
             startActivity(intent);
             finish();
         }
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mTabLayout = (TabLayout) findViewById(R.id.id_tabs);
         mViewpager = (ViewPager) findViewById(R.id.view_pager);
@@ -57,11 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mTooltext = (TextView) findViewById(R.id.tooltext);
         setupViewPager(mViewpager);
         mTabLayout.setupWithViewPager(mViewpager);
-
-       // FirebaseID = FirebaseInstanceId.getInstance().getToken();
+        // FirebaseID = FirebaseInstanceId.getInstance().getToken();
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(MainActivity.this.getApplicationContext()));
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -111,10 +104,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.search) {
-            Intent search = new Intent(MainActivity.this, SearchActivity.class);
+           /*
+           Intent search = new Intent(MainActivity.this, SearchActivity.class);
             search.putExtra("FirebaseID",mFirebaseID);
             startActivity(search);
             finish();
+            */
         } else if (id == R.id.item1) {
             Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.item2) {
