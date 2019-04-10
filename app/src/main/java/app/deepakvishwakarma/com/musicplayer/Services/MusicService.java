@@ -15,7 +15,7 @@ import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
 
 
-public class MusicService extends Service implements MediaPlayer.OnErrorListener {
+public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     private Context mContext;
     private MediaPlayer mp;
     private Common mApp;
@@ -40,6 +40,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         mApp.setService(this);
         mp = new MediaPlayer();
         mp.setOnErrorListener(this);
+        mp.setOnCompletionListener(this);
     }
 
     @Override
@@ -91,6 +92,14 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         this.mIsServicePlaying = mIsServicePlaying;
     }
 
+    public MediaPlayer getMp() {
+        return mp;
+    }
+
+    public void setMp(MediaPlayer mp) {
+        this.mp = mp;
+    }
+
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Log.d("TAG", what + "+" + extra);
@@ -114,6 +123,11 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     @Override
     public void onDestroy() {
+
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
 
     }
 }

@@ -1,7 +1,10 @@
 package app.deepakvishwakarma.com.musicplayer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,17 +26,19 @@ import java.util.ArrayList;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
 import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 
-public class PlayingActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayingActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     Toolbar mToolbar;
-    ImageButton mImageButtonBack, mPlayPrevious, mPlayNext;
-    TextView mSongName, mArtistName;
+    ImageButton mImageButtonBack, mPlayPrevious, mPlayNext, mShuffle, mRepeat;
+    TextView mSongName, mArtistName, mSongCurrentTime, mSongTotalTime;
     FloatingActionButton mPlayPause;
+    SeekBar mSeekBar;
     ImageView mImage;
     Common mApp;
     Context mContext;
     Song mSong;
     ArrayList<Song> mSongs;
     int mSongPos;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +59,8 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
                 .showImageOnFail(R.drawable.placeholder)
                 .build();
         ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(mSong.getALBUM_ID())), mImage, options);
+        mSongCurrentTime = findViewById(R.id.playing_current_time);
+        mSongTotalTime = findViewById(R.id.playing_total_time);
         mImageButtonBack = findViewById(R.id.playing_back);
         mSongName = findViewById(R.id.playing_song_name);
         mArtistName = findViewById(R.id.playing_artist_name);
@@ -61,11 +69,20 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mPlayPause = findViewById(R.id.playing_play_pause);
         mPlayPrevious = findViewById(R.id.playing_previous);
         mPlayNext = findViewById(R.id.playing_next);
+        mShuffle = findViewById(R.id.playing_shuffle);
+        mRepeat = findViewById(R.id.playing_repeat);
+        mSeekBar = findViewById(R.id.playing_seekbar);
+        mSeekBar.setProgress(0);// To set initial progress, i.e zero in starting of the song
+        mSeekBar.setMax((int)(long)mSong.getDURATION());
+
+        mSeekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+        //------setting OnClickListenter on below views---------
         mImageButtonBack.setOnClickListener(this);//Back Button of toolbar
         mPlayPause.setOnClickListener(this);
         mPlayNext.setOnClickListener(this);
         mPlayPrevious.setOnClickListener(this);
-
+        mHandler = new Handler();
+        mSeekBar.setOnSeekBarChangeListener(this);
     }
 
     @Override
@@ -98,11 +115,65 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             onBackPressed();
         } else if (id == R.id.playing_play_pause) {
             mApp.getPlayBackStarter().Stopsong();
-            //Toast.makeText(this, "Play", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.playing_next) {
             Toast.makeText(this, "Play Next", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.playing_previous) {
             Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.playing_shuffle) {
+            Toast.makeText(this, "Play Shuffle", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.playing_repeat) {
+            Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
         }
+
+    }
+    public void updateProgressBar() {
+        mHandler.postDelayed(mUpdateTimeTask, 100);
+    }
+    /**
+     * Background Runnable thread
+     */
+    private Runnable mUpdateTimeTask = new Runnable() {
+        @SuppressLint("SetTextI18n")
+        public void run() {
+            long currentDuration = mApp.getService().getMp().getCurrentPosition();
+            int currentposition = (int) currentDuration/1000;
+
+            // Displaying Total Duration time
+            mSongTotalTime.setText("" + CentraliseMusic.makeShortTimeString(mContext, mSong.getDURATION() / 1000));
+            // Displaying time completed playing
+            mSongCurrentTime.setText("" + CentraliseMusic.makeShortTimeString(mContext, currentposition));
+
+            // Updating progress bar
+        //    int progress = CentraliseMusic.getProgressPercentage(currentDuration, totalDuration);
+            //Log.d("Progress", ""+progress);
+            mSeekBar.setProgress(currentposition);
+
+            // Running this thread after 100 milliseconds
+            mHandler.postDelayed(this, 100);
+        }
+    };
+
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(mUpdateTimeTask);
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        mHandler.removeCallbacks(mUpdateTimeTask);
+        int totalDuration = (int)(long)mSong.getDURATION();
+        int currentPosition = CentraliseMusic.progressToTimer(seekBar.getProgress(), totalDuration);
+
+        // forward or backward to certain seconds
+        mApp.getService().getMp().seekTo(currentPosition);
+
+        // update timer progress again
+        updateProgressBar();
     }
 }

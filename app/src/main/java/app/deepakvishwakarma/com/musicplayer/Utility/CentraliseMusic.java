@@ -168,5 +168,36 @@ public class CentraliseMusic {
     public static Uri getAlbumArtUri(long paramInt) {
         return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), paramInt);
     }
+    /**
+     * Function to get Progress percentage
+     * @param currentDuration
+     * @param totalDuration
+     * */
+    public static int getProgressPercentage(long currentDuration, long totalDuration){
+        Double percentage = (double) 0;
+
+        long currentSeconds = (int) (currentDuration / 1000);
+        long totalSeconds = (int) (totalDuration / 1000);
+
+        // calculating percentage
+        percentage =(((double)currentSeconds)/totalSeconds)*100;
+
+        // return percentage
+        return percentage.intValue();
+    }
+    /**
+     * Function to change progress to timer
+     * @param progress -
+     * @param totalDuration
+     * returns current duration in milliseconds
+     * */
+    public static int progressToTimer(int progress, int totalDuration) {
+        int currentDuration = 0;
+        totalDuration = (int) (totalDuration / 1000);
+        currentDuration = (int) ((((double)progress) / 100) * totalDuration);
+
+        // return current duration in milliseconds
+        return currentDuration * 1000;
+    }
 
 }
