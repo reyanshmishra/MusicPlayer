@@ -38,6 +38,9 @@ public class FirebaseService extends FirebaseMessagingService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            /*
+            * In Oreo if the push notification is not received in app killed mode then turn off the battery optimization and resolve it.
+             * */
         }
 
         if (remoteMessage.getNotification() != null) {

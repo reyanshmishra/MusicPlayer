@@ -3,6 +3,7 @@ package app.deepakvishwakarma.com.musicplayer;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -72,8 +73,8 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mShuffle = findViewById(R.id.playing_shuffle);
         mRepeat = findViewById(R.id.playing_repeat);
         mSeekBar = findViewById(R.id.playing_seekbar);
-        mSeekBar.setProgress(0);// To set initial progress, i.e zero in starting of the song
-        mSeekBar.setMax((int)(long)mSong.getDURATION());
+       /* mSeekBar.setProgress(0);// To set initial progress, i.e zero in starting of the song
+        mSeekBar.setMax((int) (long) mSong.getDURATION());*/
 
         mSeekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         //------setting OnClickListenter on below views---------
@@ -83,6 +84,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mPlayPrevious.setOnClickListener(this);
         mHandler = new Handler();
         mSeekBar.setOnSeekBarChangeListener(this);
+        updateProgressBar(); //once call this method then he initialised progressbar.
     }
 
     @Override
@@ -115,40 +117,53 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             onBackPressed();
         } else if (id == R.id.playing_play_pause) {
             mApp.getPlayBackStarter().Stopsong();
-        } else if (id == R.id.playing_next) {
-            Toast.makeText(this, "Play Next", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.playing_previous) {
-            Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.playing_shuffle) {
-            Toast.makeText(this, "Play Shuffle", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.playing_repeat) {
-            Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
-        }
+            Drawable drawable = mPlayPause.getDrawable();
+            if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.pause).getConstantState())) {
+                mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.play));
+            } else {
+                mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.pause));
+            }
 
+        } else if (id == R.id.playing_next) {
+          //  Toast.makeText(this, "Play Next", Toast.LENGTH_SHORT).show();
+            mApp.getPlayBackStarter().NextSong();
+        } else if (id == R.id.playing_previous) {
+          //  Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
+            mApp.getPlayBackStarter().PreviousSong();
+        } else if (id == R.id.playing_shuffle) {
+            mApp.getPlayBackStarter().ShuffleSong();
+           // Toast.makeText(this, "Play Shuffle", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.playing_repeat) {
+            mApp.getPlayBackStarter().RepeatSong();
+            //Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
+        }
     }
+
     public void updateProgressBar() {
         mHandler.postDelayed(mUpdateTimeTask, 100);
     }
+
     /**
      * Background Runnable thread
+     * A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue. Each Handler instance     * is associated with a single thread and that thread's message queue. When you create a new Handler, it is bound to
+     * the thread /  message queue of the thread that is creating it -- from that point on, it will deliver messages and runnables
+     * to that  message queue and    execute them as they come out of the message queue.
+     * <p> There are two main uses for a Handler:
+     * (1) to schedule messages and runnables to be executed at some point in the future; and
+     * (2) to enqueue an action to be performed on a different thread than your own.
+     * <p> Scheduling messages is accomplished with the post(Runnable),postDelayed(Runnable) and more...
      */
     private Runnable mUpdateTimeTask = new Runnable() {
         @SuppressLint("SetTextI18n")
         public void run() {
+            int totalDuration = (int) (long) mSong.getDURATION();
             long currentDuration = mApp.getService().getMp().getCurrentPosition();
-            int currentposition = (int) currentDuration/1000;
-
+            int currentposition = (int) currentDuration / 1000;
             // Displaying Total Duration time
             mSongTotalTime.setText("" + CentraliseMusic.makeShortTimeString(mContext, mSong.getDURATION() / 1000));
             // Displaying time completed playing
             mSongCurrentTime.setText("" + CentraliseMusic.makeShortTimeString(mContext, currentposition));
-
-            // Updating progress bar
-        //    int progress = CentraliseMusic.getProgressPercentage(currentDuration, totalDuration);
-            //Log.d("Progress", ""+progress);
-            mSeekBar.setProgress(currentposition);
-
-            // Running this thread after 100 milliseconds
+            int currentPosition = CentraliseMusic.progressToTimer(mSeekBar.getProgress(), totalDuration);
             mHandler.postDelayed(this, 100);
         }
     };
@@ -156,7 +171,11 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+        long currentSongDuration = mApp.getService().getMp().getDuration();
+        seekBar.setMax((int) currentSongDuration / 1000);
+        int currentposition = (int) currentSongDuration / 1000;
+        mApp.getService().getMp().seekTo(currentposition);
+        mSeekBar.setProgress(currentposition);
     }
 
     @Override
@@ -166,14 +185,8 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        int totalDuration = (int)(long)mSong.getDURATION();
-        int currentPosition = CentraliseMusic.progressToTimer(seekBar.getProgress(), totalDuration);
-
-        // forward or backward to certain seconds
-        mApp.getService().getMp().seekTo(currentPosition);
-
+        int seekBarPosition = seekBar.getProgress();
         // update timer progress again
-        updateProgressBar();
+        mApp.getService().getMp().seekTo(seekBarPosition * 1000);
     }
 }

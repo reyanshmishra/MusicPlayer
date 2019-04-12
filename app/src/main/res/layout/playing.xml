@@ -117,8 +117,16 @@
                     <SeekBar
                         android:id="@+id/playing_seekbar"
                         style="@style/SeekBarColor"
+                        android:thumbOffset="0dp"
+                        android:progress="0"
+                        android:maxWidth="100dp"
+                        android:thumb="@drawable/custom_thumb"
+                        android:progressTint="@color/black"
+                        android:splitTrack="false"
+                        android:indeterminate="false"
                         android:layout_width="match_parent"
-                        android:layout_height="2dp" />
+                        android:layout_height="wrap_content"
+                        tools:targetApi="lollipop" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -130,17 +138,19 @@
                         android:id="@+id/playing_current_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
                         android:layout_alignParentStart="true"
                         android:layout_marginTop="5dp"
-                        android:text="one" />
+                        android:text="START" />
 
                     <TextView
                         android:id="@+id/playing_total_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="5dp"
-                        android:text="two" />
+                        android:text="END" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -177,7 +187,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginEnd="15dp"
+                        android:layout_marginEnd="17dp"
                         android:background="@color/white"
                         android:src="@drawable/previous" />
 
@@ -185,7 +195,7 @@
                         android:id="@+id/playing_play_pause"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@color/black"
+                        app:backgroundTint="@android:color/black"
                         android:src="@drawable/pause"
                         app:elevation="0dp"
                         app:fabSize="normal" />
@@ -194,7 +204,7 @@
                         android:id="@+id/playing_next"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
+                        android:layout_marginStart="17dp"
                         android:layout_marginTop="16dp"
                         android:background="@color/white"
                         android:src="@drawable/next" />

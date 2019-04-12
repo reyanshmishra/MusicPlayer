@@ -84,6 +84,9 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         }
     }
 
+
+
+
     public Boolean getmIsServicePlaying() {
         return mIsServicePlaying;
     }

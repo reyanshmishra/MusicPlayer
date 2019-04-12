@@ -14,6 +14,8 @@ import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 public class PlayBackStarter implements PrepareServiceListener {
     Context mContext;
     Common mApp;
+    Boolean isRepeat = false;
+    Boolean isShuffle = false;
     private ArrayList<Song> mSongs;
     private int mPos;
 
@@ -58,19 +60,61 @@ public class PlayBackStarter implements PrepareServiceListener {
     public void Stopsong() {
         if (mApp.getService().getmIsServicePlaying() == true) {
             mApp.getService().stopSong();
-            Toast.makeText(mContext, "Play", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+            Toast.makeText(mContext, "Pause", Toast.LENGTH_SHORT).show();
+        } else {
             mApp.getService().stopSong();
         }
     }
 
-    public void Nextsong() {
-
+    public void NextSong() {
+        if (mPos < (mSongs.size() - 1)) {
+            mPos = mPos + 1;
+            mApp.getService().playSong(mSongs, mPos);
+        } else {
+            // play first song
+            mApp.getService().playSong(mSongs, 0);
+            mPos = 0;
+        }
     }
 
-    public void Previoussong() {
-
+    public void PreviousSong() {
+        if (mPos > 0) {
+            mPos = mPos - 1;
+            mApp.getService().playSong(mSongs, mPos);
+        } else {
+            // play last song
+            mPos = mSongs.size() - 1;
+            mApp.getService().playSong(mSongs, mPos);
+        }
+    }
+    public void RepeatSong() {
+        if (isRepeat) {
+            isRepeat = false;
+            Toast.makeText(mContext, "Repeat is OFF", Toast.LENGTH_SHORT).show();
+          //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+        } else {
+            // make repeat to true
+            isRepeat = true;
+            Toast.makeText(mContext, "Repeat is ON", Toast.LENGTH_SHORT).show();
+            // make shuffle to false
+            isShuffle = false;
+          //  btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
+          //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
+        }
+    }
+    public void ShuffleSong() {
+        if(isShuffle){
+            isShuffle = false;
+            Toast.makeText(mContext, "Shuffle is OFF", Toast.LENGTH_SHORT).show();
+           // btnShuffle.setImageResource(R.drawable.btn_shuffle);
+        }else{
+            // make repeat to true
+            isShuffle= true;
+            Toast.makeText(mContext, "Shuffle is ON", Toast.LENGTH_SHORT).show();
+            // make shuffle to false
+            isRepeat = false;
+         //   btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
+          //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+        }
     }
 }
