@@ -2,6 +2,7 @@ package app.deepakvishwakarma.com.musicplayer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -55,11 +56,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mSong = mSongs.get(mSongPos); //assign the position of thatsong to song object
         // Now the song has reference of that purticular song so we can access there properties and methods.
         //we can fetch the position and songlist from playbackstarter class also.
-        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                .showImageForEmptyUri(R.drawable.placeholder)
-                .showImageOnFail(R.drawable.placeholder)
-                .build();
-        ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(mSong.getALBUM_ID())), mImage, options);
+        displayImage();
         mSongCurrentTime = findViewById(R.id.playing_current_time);
         mSongTotalTime = findViewById(R.id.playing_total_time);
         mImageButtonBack = findViewById(R.id.playing_back);
@@ -82,9 +79,19 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mPlayPause.setOnClickListener(this);
         mPlayNext.setOnClickListener(this);
         mPlayPrevious.setOnClickListener(this);
+        mRepeat.setOnClickListener(this);
+        mShuffle.setOnClickListener(this);
         mHandler = new Handler();
         mSeekBar.setOnSeekBarChangeListener(this);
         updateProgressBar(); //once call this method then he initialised progressbar.
+    }
+    public void  displayImage()
+    {
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                .showImageForEmptyUri(R.drawable.placeholder)
+                .showImageOnFail(R.drawable.placeholder)
+                .build();
+        ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(mSong.getALBUM_ID())), mImage, options);
     }
 
     @Override
@@ -97,7 +104,10 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.now_playing) {
-            Toast.makeText(this, "Now Playing Comming Soon", Toast.LENGTH_SHORT).show();
+            Intent nowplaying = new Intent(mContext,NowPlayingActivity.class);
+            startActivity(nowplaying);
+            finish();
+           // Toast.makeText(this, "Now Playing Comming Soon", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_one) {
             Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_two) {
@@ -123,20 +133,51 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 mPlayPause.setImageDrawable(getResources().getDrawable(R.drawable.pause));
             }
-
         } else if (id == R.id.playing_next) {
-          //  Toast.makeText(this, "Play Next", Toast.LENGTH_SHORT).show();
-            mApp.getPlayBackStarter().NextSong();
+            Toast.makeText(this, "Play Next", Toast.LENGTH_SHORT).show();
+            playnext();
         } else if (id == R.id.playing_previous) {
-          //  Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
-            mApp.getPlayBackStarter().PreviousSong();
+            Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
+           playprevious();
         } else if (id == R.id.playing_shuffle) {
             mApp.getPlayBackStarter().ShuffleSong();
-           // Toast.makeText(this, "Play Shuffle", Toast.LENGTH_SHORT).show();
+            Drawable drawable = mShuffle.getDrawable();
+            if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.shuffle).getConstantState())) {
+                mShuffle.setImageDrawable(getResources().getDrawable(R.drawable.shuffle_on));
+            } else {
+                mShuffle.setImageDrawable(getResources().getDrawable(R.drawable.shuffle));
+            }
+            Toast.makeText(this, "Play Shuffle", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.playing_repeat) {
             mApp.getPlayBackStarter().RepeatSong();
-            //Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
+            Drawable drawable = mRepeat.getDrawable();
+            if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.repeat).getConstantState())) {
+                mRepeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat_one));
+            } else {
+                mRepeat.setImageDrawable(getResources().getDrawable(R.drawable.repeat));
+            }
+            Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void playnext()
+    {
+        mApp.getPlayBackStarter().NextSong();
+        mSongs = mApp.getService().getmSongs(); //get the songs list
+        mSongPos = mApp.getService().getmSongPos(); //get the songs position
+        mSong = mSongs.get(mSongPos);
+        mSongName.setText(mSong.getTitle());
+        mArtistName.setText(mSong.getArtist());
+        displayImage();
+    }
+    public void playprevious()
+    {
+        mApp.getPlayBackStarter().PreviousSong();
+        mSongs = mApp.getService().getmSongs(); //get the songs list
+        mSongPos = mApp.getService().getmSongPos(); //get the songs position
+        mSong = mSongs.get(mSongPos);
+        mSongName.setText(mSong.getTitle());
+        mArtistName.setText(mSong.getArtist());
+        displayImage();
     }
 
     public void updateProgressBar() {

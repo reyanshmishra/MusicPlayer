@@ -58,9 +58,8 @@ public class PlayBackStarter implements PrepareServiceListener {
     }
 
     public void Stopsong() {
-        if (mApp.getService().getmIsServicePlaying() == true) {
+        if (mApp.getService().getmIsServicePlaying()) {
             mApp.getService().stopSong();
-            Toast.makeText(mContext, "Pause", Toast.LENGTH_SHORT).show();
         } else {
             mApp.getService().stopSong();
         }
@@ -87,34 +86,37 @@ public class PlayBackStarter implements PrepareServiceListener {
             mApp.getService().playSong(mSongs, mPos);
         }
     }
+
     public void RepeatSong() {
-        if (isRepeat) {
-            isRepeat = false;
-            Toast.makeText(mContext, "Repeat is OFF", Toast.LENGTH_SHORT).show();
-          //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+        if (mApp.getService().getRepeat()) {
+            mApp.getService().setRepeat(false);
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat);
         } else {
             // make repeat to true
-            isRepeat = true;
-            Toast.makeText(mContext, "Repeat is ON", Toast.LENGTH_SHORT).show();
+            mApp.getService().setRepeat(true);
+            // isRepeat = true;
             // make shuffle to false
-            isShuffle = false;
-          //  btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
-          //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
+            mApp.getService().setShuffle(false);
+            // isShuffle = false;
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
+            //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
         }
     }
+
     public void ShuffleSong() {
-        if(isShuffle){
-            isShuffle = false;
-            Toast.makeText(mContext, "Shuffle is OFF", Toast.LENGTH_SHORT).show();
-           // btnShuffle.setImageResource(R.drawable.btn_shuffle);
-        }else{
+        if (mApp.getService().getShuffle()) {
+            mApp.getService().setShuffle(false);
+            // isShuffle = false;
+            // btnShuffle.setImageResource(R.drawable.btn_shuffle);
+        } else {
             // make repeat to true
-            isShuffle= true;
-            Toast.makeText(mContext, "Shuffle is ON", Toast.LENGTH_SHORT).show();
+            mApp.getService().setShuffle(true);
+            //isShuffle = true;
             // make shuffle to false
-            isRepeat = false;
-         //   btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
-          //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+            mApp.getService().setRepeat(false);
+            //isRepeat = false;
+            //   btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat);
         }
     }
 }
