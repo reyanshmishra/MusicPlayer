@@ -15,6 +15,7 @@ public class Common extends Application {
     private static Context mContext;
     private MusicService mService;
     PlayBackStarter mPlayBackStarter;
+    PlayingActivity mPlayingActivity;
 
     @Override
     public void onCreate() {
@@ -52,6 +53,12 @@ public class Common extends Application {
                 .build();
 
         ImageLoader.getInstance().init(config);
+    }
+    public PlayingActivity getmPlayingActivity() {
+        return mPlayingActivity;
+    }
+    public void setmPlayingActivity(PlayingActivity playingActivity) {
+        mPlayingActivity = playingActivity;
     }
 
 }

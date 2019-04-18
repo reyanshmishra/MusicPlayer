@@ -47,7 +47,6 @@
                 android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="9dp"
 
                 android:layout_toStartOf="@+id/rel_duration"
@@ -68,10 +67,8 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:ellipsize="end"
-                        android:maxEms="10"
-                        android:maxLength="18"
                         android:singleLine="true"
-                        android:text="23333333333333333333"
+                        android:text="title"
                         android:textColor="#262626"
                         android:textSize="16sp"
                         android:textStyle="normal" />
@@ -91,10 +88,8 @@
                         android:layout_height="wrap_content"
                         android:background="#ffffff"
                         android:ellipsize="end"
-                        android:maxEms="15"
-                        android:maxLength="25"
                         android:singleLine="true"
-                        android:text="3"
+                        android:text="artistname"
                         android:textColor="#7b7a7a"
                         android:textSize="14sp"
                         android:textStyle="normal" />

@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,17 +16,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import app.deepakvishwakarma.com.musicplayer.Adapters.RecyclerNowplayingAdapter;
+import app.deepakvishwakarma.com.musicplayer.Interface.OnStartDragListener;
+import app.deepakvishwakarma.com.musicplayer.Interface.SimpleItemTouchHelperCallback;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
-import es.claucookie.miniequalizerlibrary.EqualizerView;
 
-public class NowPlayingActivity extends AppCompatActivity implements View.OnClickListener {
+public class NowPlayingActivity extends AppCompatActivity implements View.OnClickListener, OnStartDragListener {
     Toolbar mToolbar;
     TextView mTextviewTitle;
     RecyclerView mRecyclerview;
     ImageButton mNow_playing_back;
     RecyclerNowplayingAdapter mAdapter;
+    private ItemTouchHelper mItemTouchHelper;
     ArrayList<Song> mSongList;
-    int mSongPos;
+
     Context mContext;
     Common mApp;
 
@@ -39,13 +42,12 @@ public class NowPlayingActivity extends AppCompatActivity implements View.OnClic
         mNow_playing_back = findViewById(R.id.now_playing_back);
         mTextviewTitle = findViewById(R.id.now_playing_toolbar_title);
         mRecyclerview = findViewById(R.id.now_playing_recyclerview);
-        mAdapter = new RecyclerNowplayingAdapter(mContext);
-        // Whenever you want to start the animation
-       // equalizer.stopBars(); // When you want equalizer stops animating
-//        mSongList = CentraliseMusic.getSongs("Song",0);
+        mAdapter = new RecyclerNowplayingAdapter(mContext,this);
         mSongList = mApp.getService().getmSongs();
-        mSongPos = mApp.getService().getmSongPos();
         mRecyclerview.setAdapter(mAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerview);
         mRecyclerview.setHasFixedSize(true);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(mContext));
         mAdapter.update(mSongList);
@@ -63,5 +65,18 @@ public class NowPlayingActivity extends AppCompatActivity implements View.OnClic
             startActivity(back);
             finish();
         }
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onBackPressed() {
+      //  super.onBackPressed();
+        Intent intentbackpressed = new Intent(getApplicationContext(), PlayingActivity.class);
+        startService(intentbackpressed);
+        finish();
     }
 }

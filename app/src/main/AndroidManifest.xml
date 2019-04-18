@@ -66,8 +66,7 @@
         <activity android:name=".NowPlayingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".Services.FirebaseService">
             <intent-filter>

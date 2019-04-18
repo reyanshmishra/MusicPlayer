@@ -164,14 +164,16 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             playSong(mSongs, mSongPos);
         } else {
             // no repeat or shuffle ON - play next song
-            if (mSongPos < (mSongs.size() - 1)) {
-                playSong(mSongs, (mSongPos + 1));
-                mSongPos = mSongPos + 1;
-            } else {
-                // play first song
-                playSong(mSongs, 0);
-                mSongPos = 0;
+                if (mSongPos < (mSongs.size() - 1)) {
+                    mSongPos = mSongPos + 1;
+                    playSong(mSongs, mSongPos);
+                    mApp.getmPlayingActivity().displayImage(mSongs,mSongPos);
+                } else {
+                    // play first song
+                    mSongPos = 0;
+                    playSong(mSongs, mSongPos);
+                    mApp.getmPlayingActivity().displayImage(mSongs,mSongPos);
+                }
             }
-        }
     }
 }

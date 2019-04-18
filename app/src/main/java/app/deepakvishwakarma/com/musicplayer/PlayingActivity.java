@@ -31,7 +31,9 @@ import app.deepakvishwakarma.com.musicplayer.Utility.CentraliseMusic;
 public class PlayingActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     Toolbar mToolbar;
     ImageButton mImageButtonBack, mPlayPrevious, mPlayNext, mShuffle, mRepeat;
-    TextView mSongName, mArtistName, mSongCurrentTime, mSongTotalTime;
+    TextView mSongName;
+    TextView mArtistName;
+    TextView mSongCurrentTime, mSongTotalTime;
     FloatingActionButton mPlayPause;
     SeekBar mSeekBar;
     ImageView mImage;
@@ -41,7 +43,6 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<Song> mSongs;
     int mSongPos;
     private Handler mHandler;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,20 +51,19 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(mToolbar);
         mContext = getApplicationContext();
         mApp = (Common) getApplicationContext();
-        mImage = findViewById(R.id.playing_img);
+        mApp.setmPlayingActivity(this);
         mSongs = mApp.getService().getmSongs(); //get the songs list
         mSongPos = mApp.getService().getmSongPos(); //get the songs position
-        mSong = mSongs.get(mSongPos); //assign the position of thatsong to song object
+        //assign the position of thatsong to song object
         // Now the song has reference of that purticular song so we can access there properties and methods.
         //we can fetch the position and songlist from playbackstarter class also.
-        displayImage();
+        mSongName = findViewById(R.id.playing_song_name);
+        mArtistName = findViewById(R.id.playing_artist_name);
+        mImage = findViewById(R.id.playing_img);
+        displayImage(mSongs,mSongPos);
         mSongCurrentTime = findViewById(R.id.playing_current_time);
         mSongTotalTime = findViewById(R.id.playing_total_time);
         mImageButtonBack = findViewById(R.id.playing_back);
-        mSongName = findViewById(R.id.playing_song_name);
-        mArtistName = findViewById(R.id.playing_artist_name);
-        mSongName.setText(mSong.getTitle());
-        mArtistName.setText(mSong.getArtist());
         mPlayPause = findViewById(R.id.playing_play_pause);
         mPlayPrevious = findViewById(R.id.playing_previous);
         mPlayNext = findViewById(R.id.playing_next);
@@ -72,7 +72,6 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mSeekBar = findViewById(R.id.playing_seekbar);
        /* mSeekBar.setProgress(0);// To set initial progress, i.e zero in starting of the song
         mSeekBar.setMax((int) (long) mSong.getDURATION());*/
-
         mSeekBar.getProgressDrawable().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         //------setting OnClickListenter on below views---------
         mImageButtonBack.setOnClickListener(this);//Back Button of toolbar
@@ -85,39 +84,16 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         mSeekBar.setOnSeekBarChangeListener(this);
         updateProgressBar(); //once call this method then he initialised progressbar.
     }
-    public void  displayImage()
-    {
+
+    public void displayImage(ArrayList<Song> mSongs,int mSongPos) {
+        mSong = mSongs.get(mSongPos);
+        mSongName.setText(mSong.getTitle());
+        mArtistName.setText(mSong.getArtist());
         DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
                 .showImageForEmptyUri(R.drawable.placeholder)
                 .showImageOnFail(R.drawable.placeholder)
                 .build();
         ImageLoader.getInstance().displayImage(String.valueOf(CentraliseMusic.getAlbumArtUri(mSong.getALBUM_ID())), mImage, options);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.playing_toolbar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.now_playing) {
-            Intent nowplaying = new Intent(mContext,NowPlayingActivity.class);
-            startActivity(nowplaying);
-            finish();
-           // Toast.makeText(this, "Now Playing Comming Soon", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_one) {
-            Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_two) {
-            Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_three) {
-            Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.action_four) {
-            Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -138,7 +114,7 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             playnext();
         } else if (id == R.id.playing_previous) {
             Toast.makeText(this, "Play Previous", Toast.LENGTH_SHORT).show();
-           playprevious();
+            playprevious();
         } else if (id == R.id.playing_shuffle) {
             mApp.getPlayBackStarter().ShuffleSong();
             Drawable drawable = mShuffle.getDrawable();
@@ -159,25 +135,25 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, "Play Repeat", Toast.LENGTH_SHORT).show();
         }
     }
-    public void playnext()
-    {
+
+    public void playnext() {
         mApp.getPlayBackStarter().NextSong();
         mSongs = mApp.getService().getmSongs(); //get the songs list
         mSongPos = mApp.getService().getmSongPos(); //get the songs position
         mSong = mSongs.get(mSongPos);
         mSongName.setText(mSong.getTitle());
         mArtistName.setText(mSong.getArtist());
-        displayImage();
+        displayImage(mSongs, mSongPos);
     }
-    public void playprevious()
-    {
+
+    public void playprevious() {
         mApp.getPlayBackStarter().PreviousSong();
         mSongs = mApp.getService().getmSongs(); //get the songs list
         mSongPos = mApp.getService().getmSongPos(); //get the songs position
         mSong = mSongs.get(mSongPos);
         mSongName.setText(mSong.getTitle());
         mArtistName.setText(mSong.getArtist());
-        displayImage();
+        displayImage(mSongs, mSongPos);
     }
 
     public void updateProgressBar() {
@@ -229,5 +205,32 @@ public class PlayingActivity extends AppCompatActivity implements View.OnClickLi
         int seekBarPosition = seekBar.getProgress();
         // update timer progress again
         mApp.getService().getMp().seekTo(seekBarPosition * 1000);
+    }
+
+    //----------------------------------------------------  Menu ---------------------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.playing_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.now_playing) {
+            Intent nowplaying = new Intent(mContext, NowPlayingActivity.class);
+            startActivity(nowplaying);
+            finish();
+            // Toast.makeText(this, "Now Playing Comming Soon", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_one) {
+            Toast.makeText(this, "Item 1", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_two) {
+            Toast.makeText(this, "Item 2", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_three) {
+            Toast.makeText(this, "Item 3", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.action_four) {
+            Toast.makeText(this, "Item 4", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
