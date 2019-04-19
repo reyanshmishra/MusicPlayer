@@ -22,9 +22,9 @@ public class SplashActivity extends AppCompatActivity {
         Thread background = new Thread() {
             public void run() {
                 try {
-                    // Thread will sleep for 2 seconds
-                    sleep(2000);
-                    // After 2 seconds redirect to another intent
+                    // Thread will sleep for 1 seconds
+                    sleep(1000);
+                    // After 1 seconds redirect to another intent
 
                     Intent mIntent = new Intent(SplashActivity.this, MainActivity.class);
                     startActivity(mIntent);

@@ -1,6 +1,6 @@
 package app.deepakvishwakarma.com.musicplayer.Model;
 
-public class Song implements Cloneable {
+public class Song {
     public Long _ID;
     public String mArtist;
     public String mTitle;
@@ -37,9 +37,17 @@ public class Song implements Cloneable {
         this.mArtist = ARTIST;
     }
 
+    public String getArtist() {
+        return mArtist;
+    }
+
 
     public void setTITLE(String TITLE) {
         this.mTitle = TITLE;
+    }
+    public String getTitle()
+    {
+        return mTitle;
     }
 
     public String getALBUM() {

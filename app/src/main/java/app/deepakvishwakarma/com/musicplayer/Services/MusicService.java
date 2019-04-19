@@ -9,18 +9,26 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import app.deepakvishwakarma.com.musicplayer.Common;
 import app.deepakvishwakarma.com.musicplayer.Interface.PrepareServiceListener;
 import app.deepakvishwakarma.com.musicplayer.Model.Song;
+import app.deepakvishwakarma.com.musicplayer.NowPlayingActivity;
+import app.deepakvishwakarma.com.musicplayer.PlayingActivity;
 
 
-public class MusicService extends Service implements MediaPlayer.OnErrorListener {
+public class MusicService extends Service implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     private Context mContext;
     private MediaPlayer mp;
     private Common mApp;
     private PrepareServiceListener mPrepareServiceListener;
-    Song mSong;
+    ArrayList<Song> mSongs;
+    int mSongPos;
+    Boolean mIsServicePlaying;
+    Boolean isRepeat = false;
+    Boolean isShuffle = false;
+
 
     @Override
     public void onCreate() {
@@ -30,6 +38,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         mApp.setService(this);
         mp = new MediaPlayer();
         mp.setOnErrorListener(this);
+        mp.setOnCompletionListener(this);
+        mp.setOnCompletionListener(this);
     }
 
     @Override
@@ -48,7 +58,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public void playSong(ArrayList<Song> songs, int position) {
         try {
-            mSong = songs.get(position);
+            mSongs = songs;
+            mSongPos = position;
             mp.reset();
             mp.setDataSource(songs.get(position).getDATA());
             mp.prepare();
@@ -56,13 +67,42 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             so we won't need onPrepareListener we can remove that as well.
             */
             mp.start();
+            setmIsServicePlaying(true);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Song getSong() {
-        return mSong;
+    public void stopSong() {
+        if (!mp.isPlaying()) {
+            mp.start();
+        } else {
+            mp.pause();
+        }
+    }
+
+    public ArrayList<Song> getmSongs() {
+        return mSongs;
+    }
+
+    public int getmSongPos() {
+        return mSongPos;
+    }
+
+    public Boolean getmIsServicePlaying() {
+        return mIsServicePlaying;
+    }
+
+    public void setmIsServicePlaying(Boolean mIsServicePlaying) {
+        this.mIsServicePlaying = mIsServicePlaying;
+    }
+
+    public MediaPlayer getMp() {
+        return mp;
+    }
+
+    public void setMp(MediaPlayer mp) {
+        this.mp = mp;
     }
 
     @Override
@@ -88,6 +128,52 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     @Override
     public void onDestroy() {
+        mp.release();
+    }
 
+    public Boolean getRepeat() {
+        return isRepeat;
+    }
+
+    public void setRepeat(Boolean repeat) {
+        isRepeat = repeat;
+    }
+
+    public Boolean getShuffle() {
+        return isShuffle;
+    }
+
+    public void setShuffle(Boolean shuffle) {
+        isShuffle = shuffle;
+    }
+
+    /**
+     * On Song Playing completed
+     * if repeat is ON play same song again
+     * if shuffle is ON play random song
+     */
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if (isRepeat) {
+            // repeat is on play same song again
+            playSong(mSongs, mSongPos);
+        } else if (isShuffle) {
+            // shuffle is on - play a random song
+            Random rand = new Random();
+            mSongPos = rand.nextInt((mSongs.size() - 1) + 1);
+            playSong(mSongs, mSongPos);
+        } else {
+            // no repeat or shuffle ON - play next song
+                if (mSongPos < (mSongs.size() - 1)) {
+                    mSongPos = mSongPos + 1;
+                    playSong(mSongs, mSongPos);
+                    mApp.getmPlayingActivity().displayImage(mSongs,mSongPos);
+                } else {
+                    // play first song
+                    mSongPos = 0;
+                    playSong(mSongs, mSongPos);
+                    mApp.getmPlayingActivity().displayImage(mSongs,mSongPos);
+                }
+            }
     }
 }

@@ -7,11 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-       <!-- <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark
-        </item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
+        <!-- <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark
+         </item>
+         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>-->
 
     </style>
+
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
@@ -36,10 +37,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-
         <!--  <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimaryDark</item>
           <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>  -->
-
+    </style>
+    <style name="SeekBarColor"
+        parent="Widget.AppCompat.SeekBar">
+        <item name="colorAccent">@color/black</item>
     </style>
 
 </resources>

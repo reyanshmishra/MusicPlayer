@@ -3,6 +3,7 @@ package app.deepakvishwakarma.com.musicplayer;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,8 @@ import app.deepakvishwakarma.com.musicplayer.Services.MusicService;
 public class PlayBackStarter implements PrepareServiceListener {
     Context mContext;
     Common mApp;
+    Boolean isRepeat = false;
+    Boolean isShuffle = false;
     private ArrayList<Song> mSongs;
     private int mPos;
 
@@ -29,7 +32,7 @@ public class PlayBackStarter implements PrepareServiceListener {
         //Either do this
 //        musicService.playsong(mSong);
         //or do this both will work.
-        mApp.getPlayBackStarter().playSong(mSongs,mPos);
+        mApp.getPlayBackStarter().playSong(mSongs, mPos);
 
     }
 
@@ -50,9 +53,70 @@ public class PlayBackStarter implements PrepareServiceListener {
         } else {
             Log.d("DEEPAK", "Now the service has started only this block will execute everytime you click on a song.");
             //This will be called if the service has started and is available because once service has started we need not to start it again.
-            mApp.getService().playSong(mSongs,mPos);
+            mApp.getService().playSong(mSongs, mPos);
         }
     }
 
+    public void Stopsong() {
+        if (mApp.getService().getmIsServicePlaying()) {
+            mApp.getService().stopSong();
+        } else {
+            mApp.getService().stopSong();
+        }
+    }
 
+    public void NextSong() {
+        if (mPos < (mSongs.size() - 1)) {
+            mPos = mPos + 1;
+            mApp.getService().playSong(mSongs, mPos);
+        } else {
+            // play first song
+            mApp.getService().playSong(mSongs, 0);
+            mPos = 0;
+        }
+    }
+
+    public void PreviousSong() {
+        if (mPos > 0) {
+            mPos = mPos - 1;
+            mApp.getService().playSong(mSongs, mPos);
+        } else {
+            // play last song
+            mPos = mSongs.size() - 1;
+            mApp.getService().playSong(mSongs, mPos);
+        }
+    }
+
+    public void RepeatSong() {
+        if (mApp.getService().getRepeat()) {
+            mApp.getService().setRepeat(false);
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+        } else {
+            // make repeat to true
+            mApp.getService().setRepeat(true);
+            // isRepeat = true;
+            // make shuffle to false
+            mApp.getService().setShuffle(false);
+            // isShuffle = false;
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat_focused);
+            //  btnShuffle.setImageResource(R.drawable.btn_shuffle);
+        }
+    }
+
+    public void ShuffleSong() {
+        if (mApp.getService().getShuffle()) {
+            mApp.getService().setShuffle(false);
+            // isShuffle = false;
+            // btnShuffle.setImageResource(R.drawable.btn_shuffle);
+        } else {
+            // make repeat to true
+            mApp.getService().setShuffle(true);
+            //isShuffle = true;
+            // make shuffle to false
+            mApp.getService().setRepeat(false);
+            //isRepeat = false;
+            //   btnShuffle.setImageResource(R.drawable.btn_shuffle_focused);
+            //  btnRepeat.setImageResource(R.drawable.btn_repeat);
+        }
+    }
 }
