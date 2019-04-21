@@ -31,8 +31,7 @@ public class RecyclerNowplayingAdapter extends RecyclerView.Adapter<RecyclerNowp
     private ArrayList<Song> mSongList;
     private Context mContext;
     private Common mApp;
-    private EqualizerView equalizer;
-    private int mSongPos;
+    private Song mSong;
     private final OnStartDragListener mDragStartListener;
 
     public RecyclerNowplayingAdapter(Context context, OnStartDragListener dragStartListener) {
@@ -40,7 +39,7 @@ public class RecyclerNowplayingAdapter extends RecyclerView.Adapter<RecyclerNowp
         mDragStartListener = dragStartListener;
         mApp = (Common) mContext.getApplicationContext();
         mSongList = new ArrayList<>();
-        mSongPos = mApp.getService().getmSongPos();
+        mSong = mApp.getService().getSong();
     }
 
     @NonNull
@@ -56,13 +55,12 @@ public class RecyclerNowplayingAdapter extends RecyclerView.Adapter<RecyclerNowp
         Song model = mSongList.get(i);
         viewHolder.mTitle.setText(model.mTitle);
         viewHolder.mAlbumName.setText(model.mArtist);
-        Log.d("Position", "" + viewHolder.getPosition());
 
-        if (viewHolder.getPosition() == mSongPos) {
-            equalizer.setVisibility(View.VISIBLE);
-            equalizer.animateBars();
+        if (mSongList.get(i).mTitle.equalsIgnoreCase(mSong.mTitle)) {
+            viewHolder.equalizer.setVisibility(View.VISIBLE);
+            viewHolder.equalizer.animateBars();
         } else {
-            equalizer.setVisibility(View.GONE);
+            viewHolder.equalizer.setVisibility(View.GONE);
         }
         //Drag and drop listener
         viewHolder.mReorder.setOnTouchListener(new View.OnTouchListener() {
@@ -96,6 +94,7 @@ public class RecyclerNowplayingAdapter extends RecyclerView.Adapter<RecyclerNowp
         TextView mTitle, mAlbumName;
         ImageButton mReorder;
         CardView mCardView;
+        private EqualizerView equalizer;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,16 +103,6 @@ public class RecyclerNowplayingAdapter extends RecyclerView.Adapter<RecyclerNowp
             mReorder = itemView.findViewById(R.id.nowplaying_dragicon);
             mCardView = itemView.findViewById(R.id.cardView);
             equalizer = itemView.findViewById(R.id.equalizer_view);
-
-           /* if(getAdapterPosition() == mApp.getService().getmSongPos())
-            {
-                equalizer.setVisibility(View.VISIBLE);
-                equalizer.animateBars();
-            }
-            else
-            {
-                equalizer.setVisibility(View.GONE);
-            }*/
             itemView.setOnClickListener(this);
 
         }

@@ -45,13 +45,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Log.d("Start", "service start commond");
-
         setPrepareServiceListener(mApp.getPlayBackStarter());
-        //Either do this
         getPrepareServiceListener().onServiceRunning(this);
-        //or do this
-        //mPrepareServiceListener.onServiceRunning(this);
         return START_NOT_STICKY;
     }
 
@@ -63,9 +58,6 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
             mp.reset();
             mp.setDataSource(songs.get(position).getDATA());
             mp.prepare();
-            /*After preparing we can directly start the player as we are not streaming and not using prepareAsync,
-            so we won't need onPrepareListener we can remove that as well.
-            */
             mp.start();
             setmIsServicePlaying(true);
         } catch (IOException e) {
@@ -87,6 +79,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public int getmSongPos() {
         return mSongPos;
+    }
+
+    public Song getSong(){
+        return mSongs.get(mSongPos);
     }
 
     public Boolean getmIsServicePlaying() {

@@ -55,7 +55,6 @@ public class RecyclerSongAdapter extends RecyclerView.Adapter<RecyclerSongAdapte
 
     @Override
     public int getItemCount() {
-        Log.d("DEEPAK", "" + mSongList.size());
         return mSongList.size();
     }
 

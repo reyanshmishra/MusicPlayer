@@ -30,8 +30,8 @@ public class SongsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mSongview = inflater.inflate(R.layout.song_fragment, container, false);
-        mRecyclerView = mSongview.findViewById(R.id.recyclerview_song);
+        View view = inflater.inflate(R.layout.song_fragment, container, false);
+        mRecyclerView = view.findViewById(R.id.recyclerview_song);
         mContext = getContext();
         mApp = (Common) mContext.getApplicationContext();
         mSongList = CentraliseMusic.getSongs("Song",0);
@@ -40,6 +40,6 @@ public class SongsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter.update(mSongList);
-        return mSongview;
+        return view;
     }
 }
